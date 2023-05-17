@@ -1,7 +1,3 @@
-//*************************************************//
-//          INTHER LOGISTICS ENGINEERING           //
-//*************************************************//
-
 package com.backend.collab_backend.student;
 
 import java.util.List;
