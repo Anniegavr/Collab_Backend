@@ -24,8 +24,22 @@ public class AdministratorServiceImpl implements AdministratorService{
   }
 
   @Override
-  public Administrator createAdministrator(Administrator administrator) {
-    return administratorRepository.save(administrator);
+  public Administrator createAdministrator(AdministratorDTO administrator) {
+    Administrator administrator1 = convertDTOtoRealAdmin(administrator);
+    return administratorRepository.save(administrator1);
+  }
+  Administrator convertDTOtoRealAdmin(AdministratorDTO administratorDTO) {
+    Administrator administrator = new Administrator();
+    administrator.setFirstName(administratorDTO.firstName);
+    administrator.setLastName(administratorDTO.lastName);
+    administrator.setEmail(administratorDTO.email);
+    administrator.setSpecialty(administratorDTO.specialty);
+    administrator.setAge(administratorDTO.age);
+    administrator.setRole(administratorDTO.role);
+    administrator.setSecondRole(administratorDTO.secondRole);
+    administrator.setThirdRole(administratorDTO.thirdRole);
+    administrator.setUsername(administrator.getFirstName().toLowerCase().charAt(0)+administrator.getLastName().toLowerCase());
+    return administrator;
   }
 
   public Administrator updateAdministrator(Long id, int age) {
