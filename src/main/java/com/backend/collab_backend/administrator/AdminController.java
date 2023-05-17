@@ -5,9 +5,14 @@
 package com.backend.collab_backend.administrator;
 
 import com.backend.collab_backend.assignment.EAssignmentType;
+import com.backend.collab_backend.student.Student;
 import com.backend.collab_backend.student.StudentDTO;
+import com.backend.collab_backend.student.StudentService;
 import com.backend.collab_backend.teacher.TeacherDTO;
+import com.backend.collab_backend.teacher.TeacherService;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -27,23 +32,19 @@ import java.util.List;
 @RequestMapping("/admin")
 @RequiredArgsConstructor
 public class AdminController {
-
+  private static final Logger logger = LoggerFactory.getLogger(AdminController.class);
   private final AdministratorService administratorService;
+  private final StudentService studentService;
+  private final TeacherService teacherService;
   @PostMapping("/add_admin")
   public ResponseEntity<String> createAdministrator(AdministratorDTO administratorDTO) {
     administratorService.createAdministrator(administratorDTO);
     return ResponseEntity.ok("Success");
   }
 
-  @PostMapping("/students/add")
-  public ResponseEntity<StudentDTO> createStudent(@RequestBody StudentDTO student) {
-
-    return ResponseEntity.ok(student);
-  }
-
-  @PostMapping("/teachers/add")
-  public ResponseEntity<TeacherDTO> createStudent(@RequestBody TeacherDTO teacher) {
-    // mock implementation
+  @PostMapping("/add_teacher")
+  public ResponseEntity<TeacherDTO> createTeacher(@RequestBody TeacherDTO teacher) {
+    teacherService.createTeacher(teacher);
     return ResponseEntity.ok(teacher);
   }
 
@@ -81,9 +82,28 @@ public class AdminController {
     return ResponseEntity.ok(newList);
   }
 
-  @GetMapping
-  public ResponseEntity<String> getAllAdministrators() {
-    return ResponseEntity.ok("Success");
+  @PostMapping("/new_student")
+  public ResponseEntity<StudentDTO> createStudent(@RequestBody StudentDTO student) {
+    return ResponseEntity.ok(studentService.createStudent(student));
+  }
+
+  @PutMapping("/{id}")
+  public ResponseEntity<StudentDTO> updateStudent(@PathVariable Long id, @RequestBody StudentDTO student) throws Exception {
+    StudentDTO studentDTO = studentService.updateStudent(id, student);
+    if(!studentDTO.equals(new StudentDTO())) {
+      return ResponseEntity.ok(studentDTO);
+    }
+    return ResponseEntity.noContent().build();
+  }
+
+  @DeleteMapping("/{id}")
+  public void deleteStudent(@PathVariable Long id) {
+    studentService.deleteStudent(id);
+  }
+
+  @GetMapping("/all")
+  public ResponseEntity<List<AdministratorDTO>> getAllAdministrators() {
+    return ResponseEntity.ok(administratorService.getAllAdministrators());
   }
 
   @GetMapping("/requests/total")
