@@ -31,7 +31,7 @@ public abstract class AbstractUser implements Serializable {
   )
   @Id
   private Long id;
-  @Column(name="password", nullable = false)
+
   private String password;
 
   @Column(name="first_name", nullable = false)
@@ -40,16 +40,11 @@ public abstract class AbstractUser implements Serializable {
   @Column(name="last_name", nullable = false)
   private String lastName;
 
-  @Column(name = "age", nullable = false)
-  private Integer age;
-
-  @Column(name="email", nullable = false)
   private String email;
 
-  @Column(name="username", nullable = false, unique = true)
+  @Column(name="username", nullable = true, unique = true)
   private String username;
 
-  @Column(name = "role", nullable = false)
   private String role;
 
   private String secondRole;

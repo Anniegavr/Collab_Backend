@@ -1,7 +1,6 @@
 package com.backend.collab_backend.administrator;
 
 import com.backend.collab_backend.assignment.EAssignmentType;
-import com.backend.collab_backend.student.Student;
 import com.backend.collab_backend.student.StudentDTO;
 import com.backend.collab_backend.student.StudentService;
 import com.backend.collab_backend.teacher.TeacherDTO;
@@ -33,11 +32,11 @@ public class AdminController {
   private final StudentService studentService;
   private final TeacherService teacherService;
   @PostMapping("/add_admin")
-  public ResponseEntity<String> createAdministrator(AdministratorDTO administratorDTO) {
+  public ResponseEntity<AdministratorDTO> createAdministrator(@RequestBody AdministratorDTO administratorDTO) {
     logger.info("Creating new administrator: {}", administratorDTO);
-    administratorService.createAdministrator(administratorDTO);
+    AdministratorDTO administratorDTO1 = administratorService.createAdministrator(administratorDTO);
     logger.info("New administrator created successfully: [{}]", administratorDTO);
-    return ResponseEntity.ok("Success");
+    return ResponseEntity.ok(administratorDTO1);
   }
 
   @PostMapping("/add_teacher")
@@ -67,9 +66,7 @@ public class AdminController {
     newList.add(EAssignmentType.PROJECT.name());
     newList.add(EAssignmentType.READING.name());
     newList.add(newAssignmentType);
-    if (newList.contains(assignmentTypeOld)) {
-      newList.remove(assignmentTypeOld);
-    }
+    newList.remove(assignmentTypeOld);
     logger.info("Assignment type updated from {} to {}", assignmentTypeOld, newAssignmentType);
     return ResponseEntity.ok(newList);
   }
@@ -85,14 +82,14 @@ public class AdminController {
     return ResponseEntity.ok(newList);
   }
 
-  @PostMapping("/new_student")
+  @PostMapping("/add_student")
   public ResponseEntity<StudentDTO> createStudent(@RequestBody StudentDTO student) {
     logger.info("Creating new student: {} {}", student.firstName, student.lastName);
     return ResponseEntity.ok(studentService.createStudent(student));
   }
 
-  @PutMapping("/{id}")
-  public ResponseEntity<StudentDTO> updateStudent(@PathVariable Long id, @RequestBody StudentDTO student) throws Exception {
+  @PutMapping("/update_student/{id}")
+  public ResponseEntity<StudentDTO> updateStudent(@PathVariable Long id, @RequestBody StudentDTO student) {
     StudentDTO studentDTO = studentService.updateStudent(id, student);
     if(!studentDTO.equals(new StudentDTO())) {
       logger.info("Student with ID {} updated", id);
@@ -102,13 +99,19 @@ public class AdminController {
     return ResponseEntity.noContent().build();
   }
 
-  @DeleteMapping("/{id}")
+  @PostMapping("/auth/signin")
+  public ResponseEntity<String> authenticateUser(@RequestBody String request) {
+    System.out.println("Got request for "+request);
+    return ResponseEntity.ok("Success");
+  }
+
+  @DeleteMapping("/del_student/{id}")
   public void deleteStudent(@PathVariable Long id) {
     logger.info("Deleting student with ID {}", id);
     studentService.deleteStudent(id);
   }
 
-  @GetMapping("/all")
+  @GetMapping("/all_admins")
   public ResponseEntity<List<AdministratorDTO>> getAllAdministrators() {
     logger.info("Received request to get all administrators");
     return ResponseEntity.ok(administratorService.getAllAdministrators());
@@ -120,20 +123,17 @@ public class AdminController {
     return ResponseEntity.ok("3,489,744");
   }
 
-  @GetMapping("/{id}")
+  @GetMapping("/admin/{id}")
   public ResponseEntity<String> getAdministratorByAdministratorId(@PathVariable Long id) {
     logger.info("Received request to get administrator by ID: {}", id);
+    administratorService.getAdministratorByAdministratorId(id);
     return ResponseEntity.ok("JonathanD: Dean, HR Manager");
   }
 
-  @PutMapping("/{id}")
-  public ResponseEntity<String> updateAdministrator(@PathVariable Long id, @RequestBody Integer body) {
-    logger.info("Received request to update administrator with ID: {}", id);
-    return ResponseEntity.ok("Success");
-  }
 
-  @DeleteMapping("/{id}")
+  @DeleteMapping("/delete_admin/{id}")
   public ResponseEntity<String> deleteAdministrator(@PathVariable Long id) {
+    administratorService.deleteAdministrator(id);
     logger.info("Received request to delete administrator with ID: {}", id);
     return ResponseEntity.ok("Success, you deleted admin with ID "+id);
   }
