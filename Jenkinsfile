@@ -10,9 +10,9 @@ pipeline {
           }
         }
 
-        stage('clone') {
+        stage('Start') {
           steps {
-            mail(subject: 'Build Collab Backend', body: 'We\'re building', charset: 'UTF-8', from: 'Jenkins', to: 'agavrilita@inthergroup.com')
+            echo 'OFFF WE GOOOOO'
           }
         }
 
