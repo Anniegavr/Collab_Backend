@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import java.time.LocalDate;
 @Entity
 @RequiredArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
 @EnableJpaRepositories
@@ -40,10 +41,26 @@ public class Assignment {
   private String teacherName;
 
   @Column(name = "due_date", nullable = false)
-  private LocalDate dueDate;
+  private String dueDate;
 
   //    @ManyToOne(fetch = FetchType.LAZY)
 //    @JoinColumn(name = "teacher_id", nullable = false)
   @Column(name = "teacher_id")
   private Long teacherId;
+
+  public Assignment(String title,
+                    String description,
+                    String groups,
+                    String type,
+                    String time,
+                    String dueDate,
+                    String teacherName) {
+    this.title = title;
+    this.description = description;
+    this.groups = groups;
+    this.type = type;
+    this.time = time;
+    this.dueDate = dueDate;
+    this.teacherName = teacherName;
+  }
 }

@@ -52,7 +52,6 @@ public class AssignmentServiceImpl implements AssignmentService {
 
     TeacherDTO teacherName = teacherService.getTeacherByTeacherId(assignment.getTeacherId());
     assignmentDTO.setTeacherName(teacherName.getFirstName()+" "+teacherName.getLastName());
-    assignmentDTO.setDueDate(assignment.getDueDate());
     return assignmentDTO;
   }
 
@@ -67,7 +66,7 @@ public class AssignmentServiceImpl implements AssignmentService {
     assignmentDTO.setTitle(assignment.getTitle());
     assignmentDTO.setDescription(assignment.getDescription());
     assignmentDTO.setTeacherName(teacherName.getFirstName()+" "+teacherName.getLastName());
-    assignmentDTO.setDueDate(assignment.getDueDate());
+
 //        if (teacher == null || !assignment.getTeacher().equals(teacher)) {
 //            return assignment;
 //        }
@@ -96,7 +95,6 @@ public class AssignmentServiceImpl implements AssignmentService {
     Assignment assignment1 = new Assignment();
     assignment1.setTitle(assignment.getTitle());
     assignment1.setDescription(assignment.getDescription());
-    assignment1.setDueDate(assignment.getDueDate());
 
     assignmentRepository.save(assignment1);
     return assignment;

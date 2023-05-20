@@ -34,10 +34,8 @@ public abstract class AbstractUser implements Serializable {
 
   private String password;
 
-  @Column(name="first_name", nullable = false)
   private String firstName;
 
-  @Column(name="last_name", nullable = false)
   private String lastName;
 
   private String email;
