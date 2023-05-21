@@ -21,8 +21,8 @@ services:
       depends_on:
         - eureka-server
     app-service:
-      image: anniegavr/giveaway_service:latest
-      container_name: giveaway-service
+      image: anniegavr/collab-buddy:latest
+      container_name: collab-buddy
       ports:
         - "8090:8090"
       environment:
