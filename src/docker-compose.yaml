@@ -1,0 +1,38 @@
+version: '1'
+services:
+  eureka-server:
+    image: anniegavr/eureka_server:latest
+    container_name: eureka-server
+    ports:
+      - "8761:8761"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    networks:
+      - dapp
+    api-gateway:
+      image: anniegavr/api_gateway:latest
+      container_name: api-gateway
+      ports:
+        - "8083:8083"
+      environment:
+        - SPRING_PROFILES_ACTIVE=docker
+      networks:
+        - dapp
+      depends_on:
+        - eureka-server
+    app-service:
+      image: anniegavr/giveaway_service:latest
+      container_name: giveaway-service
+      ports:
+        - "8090:8090"
+      environment:
+        - SPRING_PROFILES_ACTIVE=docker
+      networks:
+        - dapp
+      depends_on:
+        - eureka-server
+        - api-gateway
+
+  networks:
+    dapp:
+      driver: bridge
