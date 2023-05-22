@@ -1,8 +1,8 @@
 version: '1'
 services:
   collab-buddy:
-    image: backend_app:v1
+    image: backend_app:v4
     container_name: collab-buddy
     ports:
-      - "8080:8080"
+      - "8081:8081"
     restart: "always"
