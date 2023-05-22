@@ -89,7 +89,7 @@ export default {
         email: this.email,
         password: this.password
       }
-      axios.post('http://localhost:8080/api/auth/signup', body, {
+      axios.post('http://localhost:8081/api/auth/signup', body, {
       })
           .then(response => {
             if (response.status === 200) {

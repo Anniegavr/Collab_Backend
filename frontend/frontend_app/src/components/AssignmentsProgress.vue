@@ -50,7 +50,7 @@ export default {
   },
   methods: {
     fetchAssignments(studentId) {
-      axios.get('http://localhost:8080/students/'.concat(studentId).concat('/assignments'))
+      axios.get('http://localhost:8081/students/'.concat(studentId).concat('/assignments'))
           .then(response => {
             this.assignments = response.data;
             console.log(studentId)

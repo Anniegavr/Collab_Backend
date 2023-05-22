@@ -39,7 +39,7 @@ export default {
   },
   methods: {
     getAllAssignmentTypes() {
-      axios.get('http://localhost:8080/admin/assignment_types')
+      axios.get('http://localhost:8081/admin/assignment_types')
           .then(response => {
             this.assignmentTypes = response.data;
             console.log(response)
@@ -54,7 +54,7 @@ export default {
         "oldType": type,
         "newType": newType,
       }
-      axios.put("http://localhost:8080/admin/assignment_types/edit/", editType)
+      axios.put("http://localhost:8081/admin/assignment_types/edit/", editType)
           .then(response => {
             this.assignmentTypes = response.data;
             console.log("Modified types: ".concat(response.data))
@@ -71,7 +71,7 @@ export default {
       const confirmed = confirm(`Are you sure you want to delete ${type} ?`);
 
       if (confirmed) {
-        axios.delete("http://localhost:8080/admin/assignment_types/delete/", type)
+        axios.delete("http://localhost:8081/admin/assignment_types/delete/", type)
             .then(response => {
               this.assignmentTypes = response.data;
               console.log("Modified types: ".concat(response.data))
@@ -86,7 +86,7 @@ export default {
     },
     addType() {
       const newType = prompt('Enter the new type:').toUpperCase();
-      axios.post("http://localhost:8080/admin/assignment_types/add", newType)
+      axios.post("http://localhost:8081/admin/assignment_types/add", newType)
           .then(response => {
             this.assignmentTypes = response.data;
             console.log("Modified types: ".concat(response.data))

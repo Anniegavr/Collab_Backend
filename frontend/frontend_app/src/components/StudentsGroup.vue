@@ -64,7 +64,7 @@ export default {
   },
   methods: {
     fetchStudentGroups() {
-      axios.get('http://localhost:8080/student_groups/all')
+      axios.get('http://localhost:8081/student_groups/all')
           .then(response => {
             this.studentGroups = response.data;
           })
@@ -85,7 +85,7 @@ export default {
         // If the user entered a new name and email
         if (newName || newEmail || newYear || newSpecialty) {
           const newStudentGroup = new Group(studentGroup.id, newName, newYear, newEmail, newSpecialty)
-          axios.put("http://localhost:8080/admin/student_groups/edit/", newStudentGroup)
+          axios.put("http://localhost:8081/admin/student_groups/edit/", newStudentGroup)
               .then(response => {
                 this.studentGroups[index] = this.fetchStudentGroups();
                 console.log("Modified types: ".concat(response.data))
@@ -108,7 +108,7 @@ export default {
         const confirmed = confirm(`Are you sure you want to delete ${studentGroup.name}?`);
         // If the user confirms the deletion
         if (confirmed) {
-          axios.delete("http://localhost:8080/admin/studentGroups/delete/"+ studentGroup.id)
+          axios.delete("http://localhost:8081/admin/studentGroups/delete/"+ studentGroup.id)
               .then(response => {
                 this.studentGroups = this.fetchStudentGroups()
                 console.log("Modified types: ".concat(response.data))

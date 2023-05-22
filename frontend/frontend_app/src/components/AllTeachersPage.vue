@@ -64,7 +64,7 @@ export default {
   },
   methods: {
     fetchTeachers() {
-      axios.get('http://localhost:8080/teachers')
+      axios.get('http://localhost:8081/teachers')
           .then(response => {
             this.teachers = response.data;
           })
@@ -86,7 +86,7 @@ export default {
         if (newFirstName || newLastName || newEmail || newSpecialty) {
           const teacherToEdit = new Teacher(teacher.firstName, teacher.lastName, teacher.email, teacher.specialty)
           // Update the user object with the new name and email
-          axios.put("http://localhost:8080/admin/teachers/edit/", teacherToEdit)
+          axios.put("http://localhost:8081/admin/teachers/edit/", teacherToEdit)
               .then(response => {
                 this.teachers[index] = response.data;
                 console.log("Modified types: ".concat(response.data))
@@ -105,7 +105,7 @@ export default {
       if (index !== -1) {
         const confirmed = confirm(`Are you sure you want to delete ${teacher.firstName} ${teacher.lastName} ?`);
         if (confirmed) {
-          axios.delete("http://localhost:8080/admin/teachers/delete/"+ teacher.id)
+          axios.delete("http://localhost:8081/admin/teachers/delete/"+ teacher.id)
               .then(response => {
                 this.teachers = this.fetchTeachers()
                 console.log("Modified types: ".concat(response.data))
@@ -131,7 +131,7 @@ export default {
         "email": email,
         "specialty": specialty
       }
-      axios.post("http://localhost:8080/admin/add_teacher", newTeacher)
+      axios.post("http://localhost:8081/admin/add_teacher", newTeacher)
           .then(response => {
             this.teachers = response.data;
             console.log("Added teacher: ".concat(response.data))

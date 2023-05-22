@@ -117,7 +117,7 @@ export default {
       this.todos.forEach((todo) => (todo.completed = e.target.checked))
     },
     fetchToDos(e) {
-      axios.get('http://localhost:8080/users/todo/all')
+      axios.get('http://localhost:8081/users/todo/all')
           .then(response => {
             this.todos = response.data;
           })

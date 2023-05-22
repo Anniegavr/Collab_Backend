@@ -18,7 +18,7 @@ export default {
   created() {
     // make an API call to get the total number of requests
     // replace the API endpoint with your own
-    axios.get('http://localhost:8080/admin/requests/total')
+    axios.get('http://localhost:8081/admin/requests/total')
         .then(response => {
           this.totalRequests = response.data;
         })

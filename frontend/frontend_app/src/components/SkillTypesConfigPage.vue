@@ -39,7 +39,7 @@ export default {
   },
   methods: {
     getAllSkillTypes() {
-      axios.get('http://localhost:8080/admin/skill_types/all')
+      post("http://localhost:8081/admin/skill_types/all')
           .then(response => {
             this.skillTypes = response.data;
             console.log(response)
@@ -53,7 +53,7 @@ export default {
       if (index !== -1) {
         const newType = prompt('Enter the new type:', type);
         const editSkillBody = {"type": type, "newType": newType}
-        axios.put("http://localhost:8080/admin/skill_types/edit/", editSkillBody)
+        axios.put("http://localhost:8081/admin/skill_types/edit/", editSkillBody)
             .then(response => {
               this.skillTypes = this.getAllSkillTypes();
               console.log("Modified types: ".concat(response.data))
@@ -74,7 +74,7 @@ export default {
         const confirmed = confirm(`Are you sure you want to delete ${type} ?`);
         // If the user confirms the deletion
         if (confirmed) {
-          axios.delete("http://localhost:8080/admin/skill_types/delete/", type)
+          axios.delete("http://localhost:8081/admin/skill_types/delete/", type)
               .then(response => {
                 this.skillTypes = this.getAllSkillTypes()
                 console.log("Modified types: ".concat(response.data))
@@ -91,7 +91,7 @@ export default {
     },
     addType() {
       const newType = prompt('Enter the new type:');
-      axios.post("http://localhost:8080/admin/skill_types/add", newType)
+      axios.post("http://localhost:8081/admin/skill_types/add", newType)
           .then(response => {
             this.skillTypes = this.getAllSkillTypes()
             console.log("Modified types: ".concat(response.data))

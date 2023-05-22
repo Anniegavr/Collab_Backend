@@ -48,7 +48,7 @@ export default {
   },
   methods: {
     getAllUsers(e){
-      axios.get('http://localhost:8080/admin/users/all')
+      axios.get('http://localhost:8081/admin/users/all')
           .then(response => {
             this.users = response.data;
           })

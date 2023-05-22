@@ -64,7 +64,7 @@ export default {
   },
   methods: {
     fetchStudents() {
-      axios.get('http://localhost:8080/students')
+      axios.get('http://localhost:8081/students')
           .then(response => {
             this.students = response.data;
           })
@@ -96,7 +96,7 @@ export default {
             "email": newEmail,
             "specialty": newSpecialty,
           }
-          axios.put('http://localhost:8080/admin/update_student/'+student.id, studentToEdit)
+          axios.put('http://localhost:8081/admin/update_student/'+student.id, studentToEdit)
               .then(response => {
                 this.students = this.fetchStudents()
                 console.log(response.status+"\n "+response.data)
@@ -113,7 +113,7 @@ export default {
         const confirmed = confirm(`Are you sure you want to delete ${student.firstName} ${student.lastName} ?`);
         if (confirmed) {
           console.log("aha, id "+student.id)
-          axios.delete('http://localhost:8080/admin/del_student/'+ student.id)
+          axios.delete('http://localhost:8081/admin/del_student/'+ student.id)
               .then(response => {
                 this.students = this.fetchStudents()
                 console.log(response.status+"\n "+response.data)
@@ -140,7 +140,7 @@ export default {
         "year": year,
       }
 
-      axios.post("http://localhost:8080/admin/add_student", newStudent)
+      axios.post("http://localhost:8081/admin/add_student", newStudent)
           .then(response => {
             this.students.push(response.data);
 

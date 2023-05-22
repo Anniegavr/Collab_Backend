@@ -53,7 +53,7 @@ export default {
     }
   },
   mounted() {
-    axios.get('http://localhost:8080/students/'+5+'/progress')
+    axios.get('http://localhost:8081/students/'+5+'/progress')
         .then(response => {
           const progressData = response.data;
           for (let i = 0; i < progressData.length; i++) {

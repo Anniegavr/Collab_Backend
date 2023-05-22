@@ -43,7 +43,7 @@ export default {
   },
   methods: {
     fetchStudentCourses(studentId) {
-      axios.get("http://localhost:8080/students/".concat(studentId).concat('/courses'))
+      axios.get("http://localhost:8081/students/".concat(studentId).concat('/courses'))
           .then(response => {
             this.courses = response.data;
             console.log(studentId)

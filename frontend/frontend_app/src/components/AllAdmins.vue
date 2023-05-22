@@ -61,7 +61,7 @@ export default {
   },
   methods: {
     fetchAdmins() {
-      axios.get('http://localhost:8080/admin/all_admins')
+      axios.get('http://localhost:8081/admin/all_admins')
           .then(response => {
             this.admins = response.data;
           })
@@ -92,7 +92,7 @@ export default {
             "email": newEmail,
             "specialty": newSpecialty,
           }
-          axios.put('http://localhost:8080/admin/'+adminToEdit.id, adminToEdit)
+          axios.put('http://localhost:8081/admin/'+adminToEdit.id, adminToEdit)
               .then(response => {
                 this.admins = this.fetchAdmins()
                 console.log(response.status+"\n "+response.data)
@@ -108,7 +108,7 @@ export default {
       if (index !== -1) {
         const confirmed = confirm(`Are you sure you want to delete ${admin.firstName} ${admin.lastName} ?`);
         if (confirmed) {
-          axios.delete('http://localhost:8080/admin/'+ admin.id)
+          axios.delete('http://localhost:8081/admin/'+ admin.id)
               .then(response => {
                 this.admins = this.fetchAdmins()
                 console.log(response.status+"\n "+response.data)
@@ -135,7 +135,7 @@ export default {
         "username": username,
       }
       console.log(newAdmin)
-      axios.post("http://localhost:8080/admin/add_admin", newAdmin)
+      axios.post("http://localhost:8081/admin/add_admin", newAdmin)
           .then(response => {
             this.admins.push(response.data);
 
