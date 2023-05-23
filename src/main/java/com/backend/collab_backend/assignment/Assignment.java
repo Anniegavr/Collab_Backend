@@ -6,10 +6,8 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import java.time.LocalDate;
 @Entity
 @RequiredArgsConstructor
-@AllArgsConstructor
 @Getter
 @Setter
-@EnableJpaRepositories
 public class Assignment {
   @Id
   @SequenceGenerator(

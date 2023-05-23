@@ -1,7 +1,7 @@
-version: '1'
+version: '7'
 services:
   collab-buddy:
-    image: backend_app:v4
+    image: backend-colla:v7
     container_name: collab-buddy
     ports:
       - "8081:8081"
