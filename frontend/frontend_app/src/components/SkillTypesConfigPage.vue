@@ -39,7 +39,7 @@ export default {
   },
   methods: {
     getAllSkillTypes() {
-      post("http://localhost:8081/admin/skill_types/all')
+      axios.get('http://localhost:8081/admin/skill_types/all')
           .then(response => {
             this.skillTypes = response.data;
             console.log(response)
