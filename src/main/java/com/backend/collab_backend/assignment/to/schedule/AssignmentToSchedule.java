@@ -1,5 +1,6 @@
-package com.backend.collab_backend.student;
+package com.backend.collab_backend.assignment.to.schedule;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -10,23 +11,25 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@RequiredArgsConstructor
 @Getter
 @Setter
-public class Progress {
+@RequiredArgsConstructor
+public class AssignmentToSchedule {
   @SequenceGenerator(
-          name="progress_sequence",
-          sequenceName = "progress_sequence",
+          name="assign_sch_sequence",
+          sequenceName = "assign_sch_sequence",
           allocationSize = 1
   )
   @GeneratedValue(
           strategy = GenerationType.SEQUENCE,
-          generator = "progress_sequence"
+          generator = "assign_sch_sequence"
   )
   @Id
   private Long id;
+  @Column(nullable = false)
+  private Long groupId;
+  private Long assignmentId;
+  @Column(nullable = false)
+  private Long scheduleId;
 
-  public Long studentId;
-  public Long assignmentId;
-  public int percentageDone;
 }

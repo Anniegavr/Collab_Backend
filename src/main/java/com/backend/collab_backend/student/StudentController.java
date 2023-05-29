@@ -43,10 +43,10 @@ public class StudentController {
   @GetMapping("/{id}/assignments")
   public ResponseEntity<List<Assignment>> getAllStudentAssignments(@PathVariable Long id) {
     List<Assignment> allAssignments = new ArrayList<>();
-    allAssignments.add(new Assignment( "LFPC", "Lab 3", "FAF-191", "LAB",  "5h", "15.03.2025", "Ana"));
-    allAssignments.add(new Assignment( "LFPC", "Project 2", "FAF-191", "PROJECT",  "2h", "15.03.2025", "Ana"));
-    allAssignments.add(new Assignment( "LFPC", "Chapter 10", "FAF-191", "READING",  "1h", "15.03.2025", "Ana"));
-    allAssignments.add(new Assignment( "LFPC", "Gr. Pr. 2", "FAF-191", "PROJECT",  "15h", "15.03.2025", "Ana"));
+//    allAssignments.add(new Assignment( "LFPC", "Lab 3", "FAF-191", "LAB",  "5h", "15.03.2025", "Ana"));
+//    allAssignments.add(new Assignment( "LFPC", "Project 2", "FAF-191", "PROJECT",  "2h", "15.03.2025", "Ana"));
+//    allAssignments.add(new Assignment( "LFPC", "Chapter 10", "FAF-191", "READING",  "1h", "15.03.2025", "Ana"));
+//    allAssignments.add(new Assignment( "LFPC", "Gr. Pr. 2", "FAF-191", "PROJECT",  "15h", "15.03.2025", "Ana"));
     System.out.println("Received request to view assignments for student_id = "+id);
     return ResponseEntity.ok(allAssignments);
   }
@@ -80,13 +80,13 @@ public class StudentController {
   public ResponseEntity<List<Progress>> getStudentProgressById(@PathVariable Long id) {
     System.out.println("Received req to see progress for id: "+id);
     List<Progress> progresses = new ArrayList<>();
-    progresses.add(new Progress("Math", 90));
-    progresses.add(new Progress("Chem", 60));
-    progresses.add(new Progress("Rom", 50));
-    progresses.add(new Progress("Drom", 30));
-    progresses.add(new Progress("Baroom", 70));
-    progresses.add(new Progress("Hakuna", 50));
-    progresses.add(new Progress("Matana", 50));
+//    progresses.add(new Progress("Math", 90));
+//    progresses.add(new Progress("Chem", 60));
+//    progresses.add(new Progress("Rom", 50));
+//    progresses.add(new Progress("Drom", 30));
+//    progresses.add(new Progress("Baroom", 70));
+//    progresses.add(new Progress("Hakuna", 50));
+//    progresses.add(new Progress("Matana", 50));
     return ResponseEntity.ok(progresses);
   }
 

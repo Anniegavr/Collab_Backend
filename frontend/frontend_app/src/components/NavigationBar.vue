@@ -96,7 +96,8 @@ export default {
   height: 8vh;
   left: 0;
   right: 0;
-  background: linear-gradient(180deg, #0582ca 3.9%, #006494 87.46%);
+  //background-image: linear-gradient( 105.3deg,  rgba(30,39,107,1) 21.8%, rgba(77,118,221,1) 100.2% );
+  background-image: linear-gradient( 109.6deg,  rgba(41,125,182,1) 3.6%, rgba(77,58,151,1) 51%, rgba(103,55,115,1) 92.9% );
   box-shadow: 0 13px 4px rgba(0, 0, 0, 0.18);
   border-radius: 0;
   display: inline-flex; /* add display flex */

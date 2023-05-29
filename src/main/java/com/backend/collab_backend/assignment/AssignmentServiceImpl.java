@@ -25,10 +25,10 @@ public class AssignmentServiceImpl implements AssignmentService {
 
   @Override
   public List<AssignmentDTO> findAllAssignments(List<String> groups) {
-    List<Assignment> allAssignments = assignmentRepository.findAllByGroupsIn(groups);
+    List<Assignment> allAssignments = assignmentRepository.findAllByGroupIdIn(groups);
     List<AssignmentDTO> returnListOfAssignments = new ArrayList<>();
     if (allAssignments.isEmpty()){
-
+      return new ArrayList<>();
     } else {
       for (Assignment assignment : allAssignments){
         returnListOfAssignments.add(convertAssignmentToDTO(assignment));
@@ -39,7 +39,6 @@ public class AssignmentServiceImpl implements AssignmentService {
 
   @Override
   public AssignmentDTO findAssignmentById(Long id) {
-    AssignmentDTO assignmentDTO = new AssignmentDTO();
     Assignment assignment = assignmentRepository.findById(id).orElseGet(Assignment::new);
 
     return convertAssignmentToDTO(assignment);
@@ -80,7 +79,6 @@ public class AssignmentServiceImpl implements AssignmentService {
 
   @Override
   public AssignmentDTO updateAssignment(Long id, AssignmentDTO assignment) {
-    //TODO implement
     return new AssignmentDTO();
   }
 

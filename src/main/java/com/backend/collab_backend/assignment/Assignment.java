@@ -21,44 +21,26 @@ public class Assignment {
   )
   private Long assignmentId;
 
-  @Column(name = "course", nullable = false)
+  @Column(nullable = false)
   private String course;
-  @Column(name = "title", nullable = false)
+  @Column(nullable = false)
   private String title;
 
-  @Column(name = "description", nullable = false)
+  @Column(nullable = false)
   private String description;
 
-  @Column(name = "groups", nullable = false)
-  private String groups;
-  @Column(name = "type", nullable = false)
+  @Column(nullable = false)
+  private String groupId;
+  @Column(nullable = false)
   private String type;
-  @Column(name = "time", nullable = false)
+  @Column(nullable = false)
   private String time;
-  @Column(name = "teacher_name", nullable = false)
+  @Column(nullable = false)
   private String teacherName;
 
-  @Column(name = "due_date", nullable = false)
-  private String dueDate;
+  @Column(nullable = false)
+  private LocalDate dueDate;
 
-  //    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "teacher_id", nullable = false)
-  @Column(name = "teacher_id")
+  @Column(nullable = false)
   private Long teacherId;
-
-  public Assignment(String title,
-                    String description,
-                    String groups,
-                    String type,
-                    String time,
-                    String dueDate,
-                    String teacherName) {
-    this.title = title;
-    this.description = description;
-    this.groups = groups;
-    this.type = type;
-    this.time = time;
-    this.dueDate = dueDate;
-    this.teacherName = teacherName;
-  }
 }

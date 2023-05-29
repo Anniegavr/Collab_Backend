@@ -38,13 +38,37 @@ public class AdminController {
     logger.info("New administrator created successfully: [{}]", administratorDTO);
     return ResponseEntity.ok(administratorDTO1);
   }
-
+  @PutMapping("/update_teacher/{id}")
+  public ResponseEntity<TeacherDTO> updateTeacher(@PathVariable Long id, @RequestBody TeacherDTO teacherDTO) {
+    TeacherDTO teacherDTO1 = teacherService.updateTeacher(id, teacherDTO).getBody();
+    if(!teacherDTO1.equals(new TeacherDTO())) {
+      logger.info("Teacher with ID {} updated", id);
+      return ResponseEntity.ok(teacherDTO1);
+    }
+    logger.info("Student with ID {} not found", id);
+    return ResponseEntity.noContent().build();
+  }
   @PostMapping("/add_teacher")
   public ResponseEntity<TeacherDTO> createTeacher(@RequestBody TeacherDTO teacher) {
     logger.info("Creating new teacher: {}", teacher);
     teacherService.createTeacher(teacher);
     logger.info("New teacher created successfully: [{}]", teacher);
     return ResponseEntity.ok(teacher);
+  }
+  @PostMapping("/add_student")
+  public ResponseEntity<StudentDTO> createStudent(@RequestBody StudentDTO student) {
+    logger.info("Creating new student: {} {}", student.firstName, student.lastName);
+    return ResponseEntity.ok(studentService.createStudent(student));
+  }
+  @PutMapping("/update_student/{id}")
+  public ResponseEntity<StudentDTO> updateStudent(@PathVariable Long id, @RequestBody StudentDTO student) {
+    StudentDTO studentDTO = studentService.updateStudent(id, student);
+    if(!studentDTO.equals(new StudentDTO())) {
+      logger.info("Student with ID {} updated", id);
+      return ResponseEntity.ok(studentDTO);
+    }
+    logger.info("Student with ID {} not found", id);
+    return ResponseEntity.noContent().build();
   }
 
   @GetMapping("/assignment_types")
@@ -70,7 +94,6 @@ public class AdminController {
     logger.info("Assignment type updated from {} to {}", assignmentTypeOld, newAssignmentType);
     return ResponseEntity.ok(newList);
   }
-
   @PostMapping("/assignment_types/add")
   public ResponseEntity<List<String>> addAssignmentType(@RequestBody String newAssignmentType) {
     List<String> newList = new ArrayList<>();
@@ -82,55 +105,32 @@ public class AdminController {
     return ResponseEntity.ok(newList);
   }
 
-  @PostMapping("/add_student")
-  public ResponseEntity<StudentDTO> createStudent(@RequestBody StudentDTO student) {
-    logger.info("Creating new student: {} {}", student.firstName, student.lastName);
-    return ResponseEntity.ok(studentService.createStudent(student));
-  }
-
-  @PutMapping("/update_student/{id}")
-  public ResponseEntity<StudentDTO> updateStudent(@PathVariable Long id, @RequestBody StudentDTO student) {
-    StudentDTO studentDTO = studentService.updateStudent(id, student);
-    if(!studentDTO.equals(new StudentDTO())) {
-      logger.info("Student with ID {} updated", id);
-      return ResponseEntity.ok(studentDTO);
-    }
-    logger.info("Student with ID {} not found", id);
-    return ResponseEntity.noContent().build();
-  }
-
   @PostMapping("/auth/signin")
   public ResponseEntity<String> authenticateUser(@RequestBody String request) {
     System.out.println("Got request for "+request);
     return ResponseEntity.ok("Success");
   }
-
   @DeleteMapping("/del_student/{id}")
   public void deleteStudent(@PathVariable Long id) {
     logger.info("Deleting student with ID {}", id);
     studentService.deleteStudent(id);
   }
-
   @GetMapping("/all_admins")
   public ResponseEntity<List<AdministratorDTO>> getAllAdministrators() {
     logger.info("Received request to get all administrators");
     return ResponseEntity.ok(administratorService.getAllAdministrators());
   }
-
   @GetMapping("/requests/total")
   public ResponseEntity<String> getTotalWebsiteRequests() {
     logger.info("Received request to get total website requests");
     return ResponseEntity.ok("3,489,744");
   }
-
   @GetMapping("/admin/{id}")
   public ResponseEntity<String> getAdministratorByAdministratorId(@PathVariable Long id) {
     logger.info("Received request to get administrator by ID: {}", id);
     administratorService.getAdministratorByAdministratorId(id);
     return ResponseEntity.ok("JonathanD: Dean, HR Manager");
   }
-
-
   @DeleteMapping("/delete_admin/{id}")
   public ResponseEntity<String> deleteAdministrator(@PathVariable Long id) {
     administratorService.deleteAdministrator(id);
