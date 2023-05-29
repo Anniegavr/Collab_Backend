@@ -3,17 +3,14 @@ package com.backend.collab_backend.student;
 import com.backend.collab_backend.assignment.Assignment;
 import com.backend.collab_backend.course.CourseDTO;
 import com.backend.collab_backend.schedule.ScheduleTask;
+import com.backend.collab_backend.student.progress.Progress;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -80,7 +77,6 @@ public class StudentController {
   public ResponseEntity<List<Progress>> getStudentProgressById(@PathVariable Long id) {
     System.out.println("Received req to see progress for id: "+id);
     List<Progress> progresses = new ArrayList<>();
-//    progresses.add(new Progress("Math", 90));
 //    progresses.add(new Progress("Chem", 60));
 //    progresses.add(new Progress("Rom", 50));
 //    progresses.add(new Progress("Drom", 30));

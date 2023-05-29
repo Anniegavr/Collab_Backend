@@ -1,4 +1,4 @@
-package com.backend.collab_backend.student;
+package com.backend.collab_backend.student.progress;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -26,7 +26,8 @@ public class Progress {
   @Id
   private Long id;
 
-  public Long studentId;
-  public Long assignmentId;
-  public int percentageDone;
+  private Long studentId;
+  private Long assignmentId;
+  private String taskName;
+  private int progress;
 }
