@@ -29,5 +29,5 @@ public class Progress {
   private Long studentId;
   private Long assignmentId;
   private String taskName;
-  private int progress;
+  private int taskProgress;
 }

@@ -1,19 +1,14 @@
 package com.backend.collab_backend.assignment;
 
-import com.backend.collab_backend.teacher.TeacherDTO;
 
 import java.util.List;
 
 public interface AssignmentService {
-  List<AssignmentDTO> findAllAssignments(List<String> groups);
+  List<AssignmentDTO> findAllByGroup(String group);
 
   AssignmentDTO findAssignmentById(Long id);
   AssignmentDTO createAssignment(AssignmentDTO assignment);
-  AssignmentDTO updateAssignment(Long id, AssignmentDTO assignment);
-
-  AssignmentDTO findAssignmentById(Long id, TeacherDTO teacher);
-
-  void updateAssignment(Long id, Assignment assignment, TeacherDTO teacher);
+  AssignmentDTO updateAssignment(Long assignId, AssignmentDTO assignment);
 
   void deleteAssignment(Long id);
 }

@@ -41,6 +41,4 @@ public class Assignment {
   @Column(nullable = false)
   private LocalDate dueDate;
 
-  @Column(nullable = false)
-  private Long teacherId;
 }

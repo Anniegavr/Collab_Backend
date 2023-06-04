@@ -2,7 +2,10 @@ package com.backend.collab_backend.schedule;
 
 import com.backend.collab_backend.assignment.Assignment;
 import com.backend.collab_backend.student.Student;
+import com.backend.collab_backend.student.progress.ProgressServiceImpl;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +18,7 @@ import java.util.Map;
 @Service
 @RequiredArgsConstructor
 public class ScheduleServiceImpl implements ScheduleService {
-
+  private static final Logger logger = LoggerFactory.getLogger(ScheduleServiceImpl.class);
   private final ScheduleRepository scheduleRepository;
 
   // Method to calculate the remaining unallocated time for a student's homework
