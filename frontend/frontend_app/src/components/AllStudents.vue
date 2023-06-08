@@ -5,7 +5,6 @@
         <table class="common_table">
           <thead>
           <tr>
-            <th><span>ID</span></th>
             <th><span>First Name</span></th>
             <th><span>Last Name</span></th>
             <th><span>Email</span></th>
@@ -16,7 +15,6 @@
           </thead>
           <tbody>
           <tr v-for="student in filteredStudents" :key="student.id">
-            <td>{{ student.id }}</td>
             <td>{{student.firstName}}</td>
             <td>{{student.lastName}}</td>
             <td>{{ student.email }}</td>
@@ -74,7 +72,7 @@ export default {
     },
     editStudent(student) {
       // Find the index of the user to edit
-      const index = this.students.findIndex(u => u.id === student.id);
+      const index = this.students.findIndex(student);
       // If the user is found
       if (index !== -1) {
         // Prompt the user to enter the new name and email
@@ -131,10 +129,12 @@ export default {
       const lastName = prompt('Enter the lastname:');
       const email = prompt('Enter the email:');
       const specialty = prompt('Enter the specialty:');
+      const group = prompt('Enter the group:');
       const year = prompt('Enter the year:', 1);
       const newStudent = {
         "firstName": firstName,
         "lastName": lastName,
+        "group": group,
         "email": email,
         "specialty": specialty,
         "year": year,

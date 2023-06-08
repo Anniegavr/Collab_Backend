@@ -1,8 +1,13 @@
 package com.backend.collab_backend.administrator;
 
 import com.backend.collab_backend.assignment.EAssignmentType;
+import com.backend.collab_backend.schedule.Schedule;
+import com.backend.collab_backend.schedule.ScheduleService;
 import com.backend.collab_backend.student.StudentDTO;
 import com.backend.collab_backend.student.StudentService;
+import com.backend.collab_backend.student.group.StudentGroup;
+import com.backend.collab_backend.student.group.StudentGroupDTO;
+import com.backend.collab_backend.student.group.StudentGroupService;
 import com.backend.collab_backend.teacher.TeacherDTO;
 import com.backend.collab_backend.teacher.TeacherService;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +36,26 @@ public class AdminController {
   private final AdministratorService administratorService;
   private final StudentService studentService;
   private final TeacherService teacherService;
+
+  private final StudentGroupService studentGroupService;
+
+  private final ScheduleService scheduleService;
+
+  @GetMapping("/schedules")
+  public ResponseEntity<List<Schedule>> getAllSchedules(){
+    return ResponseEntity.ok(scheduleService.getAllSchedules());
+  }
+
+  @GetMapping("/groups")
+  public ResponseEntity<List<StudentGroupDTO>> getAllGroups() {
+    return ResponseEntity.ok(studentGroupService.getAllGroups());
+  }
+
+  @DeleteMapping("/groups/{id}/delete")
+  public void deleteGroup(@PathVariable("id") String groupId) {
+    studentGroupService.deleteGroup(groupId);
+  }
+
   @PostMapping("/add_admin")
   public ResponseEntity<AdministratorDTO> createAdministrator(@RequestBody AdministratorDTO administratorDTO) {
     logger.info("Creating new administrator: {}", administratorDTO);
@@ -38,14 +63,20 @@ public class AdminController {
     logger.info("New administrator created successfully: [{}]", administratorDTO);
     return ResponseEntity.ok(administratorDTO1);
   }
-  @PutMapping("/update_teacher/{id}")
-  public ResponseEntity<TeacherDTO> updateTeacher(@PathVariable Long id, @RequestBody TeacherDTO teacherDTO) {
-    TeacherDTO teacherDTO1 = teacherService.updateTeacher(id, teacherDTO).getBody();
+
+  @GetMapping("/teachers")
+  public ResponseEntity<List<TeacherDTO>> getAllTeachers() {
+    return ResponseEntity.ok(teacherService.getAllTeachers());
+  }
+
+  @PostMapping("/update_teacher/{email}")
+  public ResponseEntity<TeacherDTO> updateTeacher(@PathVariable("email") String email, @RequestBody TeacherDTO teacherDTO) {
+    TeacherDTO teacherDTO1 = teacherService.updateTeacher(email, teacherDTO);
     if(!teacherDTO1.equals(new TeacherDTO())) {
-      logger.info("Teacher with ID {} updated", id);
+      logger.info("Teacher with email {} updated", email);
       return ResponseEntity.ok(teacherDTO1);
     }
-    logger.info("Student with ID {} not found", id);
+    logger.info("Teacher with email {} not found", email);
     return ResponseEntity.noContent().build();
   }
   @PostMapping("/add_teacher")
@@ -55,6 +86,12 @@ public class AdminController {
     logger.info("New teacher created successfully: [{}]", teacher);
     return ResponseEntity.ok(teacher);
   }
+
+  @DeleteMapping("delete_teacher/{email}")
+  public void deleteTeacher(@PathVariable("email") String email) {
+    teacherService.deleteTeacher(email);
+  }
+
   @PostMapping("/add_student")
   public ResponseEntity<StudentDTO> createStudent(@RequestBody StudentDTO student) {
     logger.info("Creating new student: {} {}", student.firstName, student.lastName);

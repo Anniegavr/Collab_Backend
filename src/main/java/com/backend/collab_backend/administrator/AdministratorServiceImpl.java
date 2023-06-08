@@ -1,5 +1,6 @@
 package com.backend.collab_backend.administrator;
 
+import com.backend.collab_backend.student.Student;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -46,6 +48,20 @@ public class AdministratorServiceImpl implements AdministratorService{
   @Override
   public Administrator getAdministratorByAdministratorId(Long id) {
     return administratorRepository.findById(id).get();
+  }
+
+  public Long signinAdmin(String login, String password) {
+    if(login.contains("@")) {
+      Optional<Administrator> admin = administratorRepository.findAdministratorByEmailAndPassword(login, password);
+      if (admin.isPresent()) {
+        return admin.get().getId();
+      } else {return 0L;}
+    } else {
+      Optional<Administrator> admin = administratorRepository.findAdministratorByUsernameAndPassword(login, password);
+      if (admin.isPresent()) {
+        return admin.get().getId();
+      } else {return 0L;}
+    }
   }
 
   @Override

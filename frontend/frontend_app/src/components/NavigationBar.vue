@@ -1,11 +1,12 @@
 <template>
-  <div class="menu" :class="{ active: menuActive }" style="z-index: 2">
+  <div class="menu" :class="{ active: menuActive }" style="z-index: 2; width: 10vw;">
     <ul>
       <li><button @click="closemenu" class="closeMenuB">X
       </button></li>
-      <li><router-link to="/students">Students</router-link></li>
+      <li>...</li>
       <li><router-link to="/home">Home</router-link></li>
       <li><router-link to="/profile">Profile</router-link></li>
+      <li><router-link to="/login" style="color: #2c3e50">Sign Out</router-link></li>
     </ul>
   </div>
   <div >
@@ -14,7 +15,7 @@
         <img class="menu_icon" src="./icons/homeIcon.png" alt="Home">
       </v-button>
 
-      <p id="menu-title">{{title}}</p>
+      <p id="menu-title">Collab Buddy</p>
 
       <div class="right_icons">
         <router-link to="/">
@@ -39,7 +40,7 @@ import IconHome from "./icons/IconHome.vue";
 export default {
   name: "NavigationBar",
   props: {
-    title: {
+    pageTitle: {
       type: String,
       required: true
     }

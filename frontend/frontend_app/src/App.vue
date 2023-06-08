@@ -1,5 +1,5 @@
 <template>
-  <NavigationBar :title="pageTitle"/>
+  <NavigationBar :title="this.pageTitle"/>
   <FloatingMenuButton/>
   <router-view />
 </template>

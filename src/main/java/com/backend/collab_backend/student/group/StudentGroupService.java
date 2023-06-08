@@ -4,4 +4,6 @@ import java.util.List;
 
 public interface StudentGroupService {
   List<StudentGroupDTO> getAllGroups();
+
+  void deleteGroup(String id);
 }

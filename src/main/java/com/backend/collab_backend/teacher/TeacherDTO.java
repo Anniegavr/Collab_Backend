@@ -10,11 +10,11 @@ import lombok.Setter;
 
 import java.util.List;
 
-@Getter
-@Setter
 @RequiredArgsConstructor
-public class TeacherDTO extends AbstractUser {
-  private List<String> courses;
-  private static ERole role = ERole.TEACHER;
+public class TeacherDTO {
+  public String firstName;
+  public String lastName;
+  public String email;
+  public String specialty;
 
 }

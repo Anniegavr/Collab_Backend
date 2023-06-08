@@ -7,7 +7,9 @@ import java.util.List;
 public interface TeacherService {
   List<TeacherDTO> getAllTeachers();
   TeacherDTO getTeacherByTeacherId(Long id);
+
+  Long signinTeacher(String login, String password);
   ResponseEntity<String> createTeacher(TeacherDTO teacher);
-  ResponseEntity<TeacherDTO> updateTeacher(Long id, TeacherDTO teacher);
-  void deleteTeacher(Long id);
+  TeacherDTO updateTeacher(String email, TeacherDTO teacher);
+  void deleteTeacher(String email);
 }

@@ -15,6 +15,7 @@ import java.util.List;
 @Getter
 @Setter
 public class Teacher extends AbstractUser {
+  private String specialty;
   @ElementCollection
   private List<String> courses;
 

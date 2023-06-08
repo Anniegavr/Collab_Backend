@@ -16,19 +16,8 @@ import lombok.Setter;
 @Getter
 @Setter
 public class StudentGroup {
-  @SequenceGenerator(
-          name="group_sequence",
-          sequenceName = "group_sequence",
-          allocationSize = 1
-  )
-  @GeneratedValue(
-          strategy = GenerationType.SEQUENCE,
-          generator = "group_sequence"
-  )
   @Id
-  private Long id;
-  @Column(unique = true)
-  private String name;
+  private String groupId;
   private int year;
   private String email;
   private String specialty;

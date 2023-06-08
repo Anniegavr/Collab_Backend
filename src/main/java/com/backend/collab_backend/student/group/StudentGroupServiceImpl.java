@@ -14,7 +14,7 @@ public class StudentGroupServiceImpl implements StudentGroupService {
     List<StudentGroup> allGroups = studentGroupRepository.findAll();
     List<StudentGroupDTO> allGroupsDTOs = new ArrayList<>();
     for (StudentGroup group : allGroups) {
-      allGroupsDTOs.add(new StudentGroupDTO(group.getName(),
+      allGroupsDTOs.add(new StudentGroupDTO(group.getGroupId(),
                                             group.getEmail(),
                                             group.getSpecialty(),
                                             group.getStartYear(),
@@ -25,6 +25,11 @@ public class StudentGroupServiceImpl implements StudentGroupService {
     return allGroupsDTOs;
   }
 
+  @Override
+  public void deleteGroup(String id) {
+    studentGroupRepository.deleteById(id);
+  }
+
   public StudentGroupDTO createGroup(StudentGroupDTO group) {
     StudentGroup newGroup = convertDTOToReal(group);
     studentGroupRepository.save(newGroup);
@@ -32,19 +37,19 @@ public class StudentGroupServiceImpl implements StudentGroupService {
   }
 
   public StudentGroupDTO updateGroup(StudentGroupDTO group) {
-    studentGroupRepository.delete(studentGroupRepository.findStudentGroupByName(group.name));
+    studentGroupRepository.delete(studentGroupRepository.findStudentGroupByGroupId(group.name));
     StudentGroup newGroup = convertDTOToReal(group);
     studentGroupRepository.save(newGroup);
     return group;
   }
 
   public void deleteGroup(StudentGroupDTO group) {
-    studentGroupRepository.delete(studentGroupRepository.findStudentGroupByName(group.name));
+    studentGroupRepository.delete(studentGroupRepository.findStudentGroupByGroupId(group.name));
   }
 
   public StudentGroup convertDTOToReal(StudentGroupDTO group) {
     StudentGroup newGroup = new StudentGroup();
-    newGroup.setName(group.name);
+    newGroup.setGroupId(group.name);
     newGroup.setSpecialty(group.specialty);
     newGroup.setEmail(group.email);
     newGroup.setStartYear(group.startYear);

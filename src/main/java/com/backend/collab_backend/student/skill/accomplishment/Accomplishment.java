@@ -28,7 +28,6 @@ public class Accomplishment {
   private Long id;
 
   private Long studentId;
-  @Column(unique = true)
   private String skillType;
 
   private String studentAccomplishment;

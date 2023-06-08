@@ -9,5 +9,7 @@ public interface StudentService {
   StudentDTO createStudent(StudentDTO student);
   void deleteStudent(Long id);
 
+  Long signinStudent(String login, String password);
+
   StudentDTO updateStudent(Long id, StudentDTO student);
 }

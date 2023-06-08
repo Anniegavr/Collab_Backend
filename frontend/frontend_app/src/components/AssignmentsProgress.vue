@@ -25,7 +25,7 @@
         <span class="reading">READING</span>
       </div>
       <div v-for="assignment in assignments" :key="assignment.id" class="assignments_list">
-        <p :class="['one_assignment', assignment.type]">{{assignment.name}} {{assignment.description}}</p>
+        <p :class="['one_assignment', assignment.type]">{{assignment.title}} <br> {{assignment.description}}</p>
       </div>
     </div>
   </div>
@@ -45,7 +45,8 @@ export default {
   components: {Calendar},
   data() {
     return {
-      assignments: this.fetchAssignments(localStorage.getItem(this.userId)),
+      date: Date.now(),
+      assignments: this.fetchAssignments(localStorage.getItem("userId")),
     }
   },
   methods: {
@@ -58,6 +59,9 @@ export default {
           .catch(error => {
             console.log(error);
           });
+    },
+    setDate() {
+      this.date = Date.now();
     }
   }
 }
@@ -77,7 +81,8 @@ export default {
 #pending_assignments {
   width: 70%;
   height: min-content;
-  top: 22em;
+  top: 20em;
+  left: 5em;
   position: absolute;
   flex-direction: column;
   align-items: center;
@@ -133,7 +138,7 @@ export default {
 }
 
 .legend .reading {
-  background: #588EC0;
+  background: #6c7cee;
   opacity: 66%;
   color: #ffffff;
 }

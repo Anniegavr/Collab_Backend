@@ -5,21 +5,23 @@
       <table class="common_table">
         <thead>
         <tr>
-          <th><span>ID</span></th>
           <th><span>Name</span></th>
           <th><span>Year</span></th>
           <th><span>Email</span></th>
           <th><span>Specialty</span></th>
+          <th><span>Free Time</span></th>
+          <th><span>Trip to/from College</span></th>
           <th><span>Action</span></th>
         </tr>
         </thead>
         <tbody>
-        <tr v-for="studentGroup in filteredStudentGroups" :key="studentGroup.id">
-          <td>{{ studentGroup.id }}</td>
+        <tr v-for="studentGroup in filteredStudentGroups">
           <td>{{studentGroup.name}}</td>
           <td>{{studentGroup.year}}</td>
           <td>{{studentGroup.email}}</td>
           <td>{{studentGroup.specialty}}</td>
+          <td>{{studentGroup.freeTime}}</td>
+          <td>{{studentGroup.tripTime}}</td>
           <td>
             <button class="edit-btn" @click="editStudentGroup(studentGroup)">Edit</button>
             <button class="delete-btn" @click="deleteStudentGroup(studentGroup)">Delete</button>
@@ -82,6 +84,7 @@ export default {
         const newEmail = prompt('Enter the new email:', studentGroup.email);
         const newYear = prompt('Enter the new year:', studentGroup.year);
         const newSpecialty = prompt('Enter the new specialty:', studentGroup.specialty);
+        const newFreeTime = prompt('Enter new free time: ', studentGroup.freeTime)
         // If the user entered a new name and email
         if (newName || newEmail || newYear || newSpecialty) {
           const newStudentGroup = new Group(studentGroup.id, newName, newYear, newEmail, newSpecialty)
@@ -101,7 +104,7 @@ export default {
     },
     deleteStudentGroup(studentGroup) {
       // Find the index of the user to delete
-      const index = this.studentGroups.findIndex(u => u.id === studentGroup.id);
+      const index = this.studentGroups.findIndex(studentGroup.email === studentGroup.id);
       // If the user is found
       if (index !== -1) {
         // Prompt the user to confirm the deletion

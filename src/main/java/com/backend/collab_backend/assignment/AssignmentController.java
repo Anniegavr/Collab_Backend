@@ -14,6 +14,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/assignments")
+@CrossOrigin(origins = "*")
 @RequiredArgsConstructor
 public class AssignmentController {
   private final AssignmentService assignmentService;

@@ -5,22 +5,19 @@
       <table class="common_table">
         <thead>
         <tr>
-          <th><span>ID</span></th>
           <th><span>First Name</span></th>
           <th><span>Last Name</span></th>
           <th><span>Email</span></th>
-          <th><span>Year</span></th>
           <th><span>Specialty</span></th>
           <th><span>Action</span></th>
         </tr>
         </thead>
         <tbody>
-        <tr v-for="teacher in filteredTeachers" :key="teacher.id">
-          <td>{{ teacher.id }}</td>
-          <td>{{teacher.firstName}}</td>
-          <td>{{teacher.lastName}}</td>
+        <tr v-for="teacher in fetchedTeachers">
+          <td>{{ teacher.firstName }}</td>
+          <td>{{ teacher.lastName }}</td>
           <td>{{ teacher.email }}</td>
-          <td>{{teacher.specialty}}</td>
+          <td>{{ teacher.specialty }}</td>
           <td>
             <button class="edit-btn" @click="editTeacher(teacher)">Edit</button>
             <button class="delete-btn" @click="deleteTeacher(teacher)">Delete</button>
@@ -37,62 +34,61 @@
 import SearchField from "./SearchField.vue";
 import SearchIcon from "./SearchIcon.vue";
 import axios from "axios";
-import {Teacher} from "../models/Teacher.ts";
+import { Teacher } from "../models/Teacher.ts";
 
 export default {
   name: "TeachersPage",
-  components: {SearchField, SearchIcon},
-  teachers: [],
+  components: { SearchField, SearchIcon },
+  fetchedTeachers: [],
   data() {
     return {
-      teachers: this.fetchTeachers(),
-      searchTerm: ''
-    }
+      fetchedTeachers: [],
+      searchTerm: "",
+    };
   },
-  computed: {
-    filteredTeachers() {
-      if (this.searchTerm) {
-        console.log(this.teachers.filter((teacher) =>
-            teacher.firstName.toLowerCase()));
-        return this.teachers.filter((teacher) =>
-            teacher.firstName.toLowerCase().includes(this.searchTerm.toLowerCase())
-        );
-      } else {
-        return this.teachers;
-      }
-    }
+  mounted() {
+    this.fetchTeachers();
   },
   methods: {
     fetchTeachers() {
-      axios.get('http://localhost:8081/teachers')
-          .then(response => {
-            this.teachers = response.data;
+      axios
+          .get("http://localhost:8081/admin/teachers")
+          .then((response) => {
+            console.log(response.data)
+            this.fetchedTeachers = response.data;
+            return response.data;
           })
-          .catch(error => {
+          .catch((error) => {
             console.log(error);
           });
     },
     editTeacher(teacher) {
       // Find the index of the user to edit
-      const index = this.teachers.indexOf(teacher);
+      const index = this.fetchedTeachers.indexOf(teacher);
       // If the user is found
       if (index !== -1) {
         // Prompt the user to enter the new name and email
+        console.log(teacher)
         const newFirstName = prompt('Enter the new firstname:', teacher.firstName);
         const newLastName = prompt('Enter the new lastname:', teacher.lastName);
         const newEmail = prompt('Enter the new email:', teacher.email);
         const newSpecialty = prompt('Enter the new specialty:', teacher.specialty);
         // If the user entered a new name and email
-        if (newFirstName || newLastName || newEmail || newSpecialty) {
-          const teacherToEdit = new Teacher(teacher.firstName, teacher.lastName, teacher.email, teacher.specialty)
+        if (newFirstName & newLastName & newEmail & newSpecialty) {
+          const teacherToEdit = {
+            "firstName": newFirstName,
+            "lastName": newLastName,
+            "email": newEmail,
+            "specialty": newSpecialty,
+          }
           // Update the user object with the new name and email
-          axios.put("http://localhost:8081/admin/teachers/edit/", teacherToEdit)
+          axios.post("http://localhost:8081/admin/update_teacher/"+teacher.email, teacherToEdit)
               .then(response => {
-                this.teachers[index] = response.data;
+                this.fetchTeachers()
                 console.log("Modified types: ".concat(response.data))
               })
               .catch(error => {
-                this.teachers[index] = teacherToEdit
+                this.fetchedTeachers[index] = teacherToEdit
                 alert("Success")
                 console.log(error)
               })
@@ -101,18 +97,18 @@ export default {
       }
     },
     deleteTeacher(teacher) {
-      const index = this.teachers.indexOf(teacher);
+      const index = this.fetchedTeachers.indexOf(teacher);
       if (index !== -1) {
         const confirmed = confirm(`Are you sure you want to delete ${teacher.firstName} ${teacher.lastName} ?`);
         if (confirmed) {
-          axios.delete("http://localhost:8081/admin/teachers/delete/"+ teacher.id)
+          axios.delete("http://localhost:8081/admin/delete_teacher/"+ teacher.email)
               .then(response => {
-                this.teachers = this.fetchTeachers()
+                this.fetchTeachers()
                 console.log("Modified types: ".concat(response.data))
               })
               .catch(error => {
-                const index = this.teachers.indexOf(teacher)
-                this.teachers.splice(index, 1)
+                const index = this.fetchedTeachers.indexOf(teacher)
+                this.fetchedTeachers.splice(index, 1)
                 alert("Success")
                 console.log(error)
               })
@@ -133,11 +129,11 @@ export default {
       }
       axios.post("http://localhost:8081/admin/add_teacher", newTeacher)
           .then(response => {
-            this.teachers = response.data;
+            this.fetchTeachers()
             console.log("Added teacher: ".concat(response.data))
           })
           .catch(error => {
-            this.teachers.push(newTeacher)
+            this.fetchedTeachers.push(newTeacher)
             alert("Success")
             console.log(error)
           })

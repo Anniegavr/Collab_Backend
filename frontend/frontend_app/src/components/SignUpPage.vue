@@ -3,15 +3,15 @@
     <div id="Signup" onload="loadContent()">
       <h1>Enter the Details</h1>
       <form id='form-post'>
-        <input type="text" v-model="state.firstName" placeholder="first name" id="first_name" class="name_input"/>
-        <input type="text" v-model="state.lastName" placeholder="last name" id="last_name" class="name_input"/>
-        <input type="email" v-model="state.email" placeholder="email" id="signup_email" class="email_input"/>
+        <input type="text" v-model="state.firstName" placeholder="First Name" id="first_name" class="name_input"/>
+        <input type="text" v-model="state.lastName" placeholder="Last Name" id="last_name" class="name_input"/>
+        <input type="email" v-model="state.email" placeholder="Email" id="email" class="email_input"/>
         <span v-if="v$.email.$error"> {{ v$.email.$errors[0].$message }} </span>
-        <input type="password" v-model="state.password.password" placeholder="password" id="signup_password" class="password_input"/>
+        <input type="password" v-model="state.password.password" placeholder="Password" id="password" class="password_input"/>
         <span v-if="v$.password.password.$error">
         {{ v$.password.password.$errors[0].$message }}
       </span>
-        <input required spellcheck="false" type="password" v-model="state.password.confirm" placeholder="confirm password" name="confirm_password" id="confirm_password"/>
+        <input required spellcheck="false" type="password" v-model="state.password.confirm" placeholder="Confirm password" name="confirm_password" id="confirm_password"/>
         <span v-if="v$.password.confirm.$error">
         {{ v$.password.confirm.$errors[0].$message }}
           </span>
@@ -112,45 +112,45 @@ export default {
           .catch(error => {
             console.error('Error:', error);
           });
-      // this.v$.$validate() // checks all inputs
-      // if (!this.v$.$error) {
-      //   alert('Success!')
-      //   const body = {
-      //     username: this.name,
-      //     email: this.email,
-      //     password: this.password
-      //   }
-      //   fetch('http://10.2.2.2:8080/api/auth/signup', {
-      //     hod: 'POST',
-      //     body: JSON.stringify(body),
-      //     headers: {
-      //       'Content-Type': 'application/json'
-      //     }
-      //   })
-      //       .then(response => {
-      //         if (response.ok) {
-      //           this.showError = false;
-      //           this.message = 'Signup accepted';
-      //           this.name = "";
-      //           this.email = "";
-      //           this.password = "";
-      //           this.password.confirm= "";
-      //           Router.push('/home');
-      //         } else {
-      //           this.message = "";
-      //           this.message = 'Signup not accepted';
-      //           this.name = "";
-      //           this.email = "";
-      //           this.password = "";
-      //           this.password.confirm= "";
-      //         }
-      //       })
-      //       .catch(error => {
-      //         console.error('Error:', error);
-      //       });
-      // } else {
-      //   alert('Sorry, we couldn\'t process your data. Make sure it is correct.')
-      // }
+      this.v$.$validate() // checks all inputs
+      if (!this.v$.$error) {
+        alert('Success!')
+        const body = {
+          username: this.name,
+          email: this.email,
+          password: this.password
+        }
+        fetch('http://localhost:8081/api/auth/signup', {
+          hod: 'POST',
+          body: JSON.stringify(body),
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        })
+            .then(response => {
+              if (response.ok) {
+                this.showError = false;
+                this.message = 'Signup accepted';
+                this.name = "";
+                this.email = "";
+                this.password = "";
+                this.password.confirm= "";
+                Router.push('/home');
+              } else {
+                this.message = "";
+                this.message = 'Signup not accepted';
+                this.name = "";
+                this.email = "";
+                this.password = "";
+                this.password.confirm= "";
+              }
+            })
+            .catch(error => {
+              console.error('Error:', error);
+            });
+      } else {
+        alert('Sorry, we couldn\'t process your data. Make sure it is correct.')
+      }
 
     },
   },
@@ -194,7 +194,7 @@ export default {
   align-items: center;
   margin-bottom: 20vh;
 }
-#first_name, #last_name, .password_input, #confirm_password, #email{
+#first_name, #last_name, #password, #confirm_password, #email{
   cursor: pointer;
   box-sizing: border-box;
   /* Auto layout */
