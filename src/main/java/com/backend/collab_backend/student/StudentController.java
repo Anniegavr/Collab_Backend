@@ -1,24 +1,26 @@
 package com.backend.collab_backend.student;
 
-import com.backend.collab_backend.assignment.Assignment;
 import com.backend.collab_backend.assignment.AssignmentDTO;
 import com.backend.collab_backend.assignment.AssignmentService;
 import com.backend.collab_backend.course.CourseDTO;
 import com.backend.collab_backend.schedule.ScheduleTask;
-import com.backend.collab_backend.student.progress.Progress;
 import com.backend.collab_backend.student.progress.ProgressDTO;
 import com.backend.collab_backend.student.progress.ProgressService;
+import com.backend.collab_backend.student.skill.SkillService;
+import com.backend.collab_backend.student.skill.accomplishment.Accomplishment;
+import com.backend.collab_backend.student.skill.accomplishment.AccomplishmentService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,6 +31,7 @@ import java.util.List;
 public class StudentController {
   private static final Logger logger = LoggerFactory.getLogger(StudentController.class);
   private final StudentService studentService;
+  private final AccomplishmentService accomplishmentService;
   private final AssignmentService assignmentService;
   private final ProgressService progressService;
 
@@ -49,13 +52,6 @@ public class StudentController {
     String group = studentService.getStudentById(id).group;
     List<AssignmentDTO> allAssignments = assignmentService.findAllByGroup(group);
     logger.info("Received request to view assignments for student_id[{}]",id);
-    if (allAssignments.isEmpty()) {
-      allAssignments.add(new AssignmentDTO("Web Programming", "Lab 3", "Make a GUI", "FAF-191", "LAB", "5h", LocalDate.of(2023, 5, 19), "Ana Bejan"));
-      allAssignments.add(new AssignmentDTO( "LFPC", "Project 2", "Convert a final automata into an NFA", "FAF-191", "PROJECT",  "2h", LocalDate.of(2023, 3, 15), "Darius Flocea"));
-      allAssignments.add(new AssignmentDTO( "Graphic Design", "Chapter 10", "FAF-191", "READING",  "1h", "2023, 03, 13", LocalDate.of(2023, 5, 18), "Matei Corjan"));
-      allAssignments.add(new AssignmentDTO( "Computation & Complexity", "Gr. Pr. 2", "FAF-191", "PROJECT",  "PROJECT","15h", LocalDate.of(2023, 3, 20), "Anatolii Gheorghiu"));
-    }
-
     return ResponseEntity.ok(allAssignments);
   }
   @GetMapping("/{id}/courses")
@@ -100,6 +96,18 @@ public class StudentController {
     } else {
       return ResponseEntity.ok(progressDTOS);
     }
+  }
+
+  @PostMapping("/{id}/add_skill")
+  public ResponseEntity<String> addAccomplishment(@PathVariable("id") Long studentId,@RequestBody String skillType, @RequestBody String accomplishment) {
+    logger.info("Adding accomplishment for student_id[{}]", studentId);
+    return ResponseEntity.ok(accomplishmentService.addAccomplishment(studentId, accomplishment, skillType ));
+  }
+
+  @PostMapping("/{id}/accomplishments")
+  public ResponseEntity<List<Accomplishment>> studentsAccomplishments(@PathVariable("id") Long studentId) {
+    logger.info("Searching for accomplishments for student_id[{}]", studentId);
+    return ResponseEntity.ok(accomplishmentService.findByStudent(studentId));
   }
 
 }

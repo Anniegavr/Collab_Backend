@@ -1,12 +1,12 @@
 package com.backend.collab_backend.assignment;
 
-import com.backend.collab_backend.student.progress.ProgressServiceImpl;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,9 +20,14 @@ public class AssignmentServiceImpl implements AssignmentService {
   @Override
   public List<AssignmentDTO> findAllByGroup(String group) {
     List<Assignment> allAssignments = assignmentRepository.findAllByGroupId(group);
+    logger.info("Found [{}] assignments active for group[{}]", allAssignments.size(), group);
     List<AssignmentDTO> returnListOfAssignments = new ArrayList<>();
     if (allAssignments.isEmpty()){
-      return new ArrayList<>();
+      returnListOfAssignments.add(new AssignmentDTO("Web Programming", "Lab 3", "Make a GUI", "FAF-191", "LAB", "5h", LocalDate.of(2023, 5, 19), "Ana Bejan"));
+      returnListOfAssignments.add(new AssignmentDTO( "LFPC", "Project 2", "Convert a final automata into an NFA", "FAF-191", "PROJECT",  "2h", LocalDate.of(2023, 3, 15), "Darius Flocea"));
+      returnListOfAssignments.add(new AssignmentDTO( "Graphic Design", "Chapter 10", "FAF-191", "READING",  "1h", "2023, 03, 13", LocalDate.of(2023, 5, 18), "Matei Corjan"));
+      returnListOfAssignments.add(new AssignmentDTO( "Computation & Complexity", "Gr. Pr. 2", "FAF-191", "PROJECT",  "PROJECT","15h", LocalDate.of(2023, 3, 20), "Anatolii Gheorghiu"));
+      return returnListOfAssignments;
     } else {
       for (Assignment assignment : allAssignments){
         returnListOfAssignments.add(convertAssignmentToDTO(assignment));
@@ -51,11 +56,6 @@ public class AssignmentServiceImpl implements AssignmentService {
   @Override
   public AssignmentDTO createAssignment(AssignmentDTO assignment) {
     // Shall take the teacher from the security context
-//        TeacherDTO teacher = teacherService.getTeacherByTeacherId(assignment.getTeacherId());
-//        if (teacher == null || !teacher.getCourses().contains(assignment.getDescription())) {
-//            throw new RuntimeException("Teacher cannot create an assignment for this course.");
-//        }
-
     Assignment assignment1 = new Assignment();
     assignment1.setTitle(assignment.title);
     assignment1.setDescription(assignment.description);

@@ -9,8 +9,8 @@ import java.util.Optional;
 @Repository
 public interface AssignmentRepository extends JpaRepository<Assignment, Long> {
   Optional<Assignment> findAssignmentByAssignmentId(Long id);
-  Optional<Assignment> findAssignmentByTeacherId(Long teacherId);
-  Optional<Assignment> findAssignmentByTeacherNameContaining(String teacherName);
-  Optional<Assignment> findAssignmentByTitleContaining(String containing);
+  Optional<Assignment> findAssignmentByTeacherName(String name);
+  Optional<Assignment> findAssignmentByTeacherNameContainingIgnoreCase(String teacherName);
+  Optional<Assignment> findAssignmentByTitleContainingIgnoreCase(String containing);
   List<Assignment> findAllByGroupId(String group);
 }

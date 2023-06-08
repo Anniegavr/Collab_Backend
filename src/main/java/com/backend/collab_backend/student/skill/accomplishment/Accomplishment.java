@@ -1,4 +1,4 @@
-package com.backend.collab_backend.student.group;
+package com.backend.collab_backend.student.skill.accomplishment;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -10,29 +10,26 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
-
 @Entity
 @RequiredArgsConstructor
 @Getter
 @Setter
-public class StudentGroup {
+public class Accomplishment {
   @SequenceGenerator(
-          name="group_sequence",
-          sequenceName = "group_sequence",
+          name="stud_skill_id_sequence",
+          sequenceName = "stud_skill_id_sequence",
           allocationSize = 1
   )
   @GeneratedValue(
           strategy = GenerationType.SEQUENCE,
-          generator = "group_sequence"
+          generator = "stud_skill_id_sequence"
   )
   @Id
   private Long id;
+
+  private Long studentId;
   @Column(unique = true)
-  private String name;
-  private int year;
-  private String email;
-  private String specialty;
-  private int startYear;
-  private int freeTime;
-  private int tripTime;
+  private String skillType;
+
+  private String studentAccomplishment;
 }
