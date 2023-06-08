@@ -19,7 +19,6 @@ public class StudentServiceImpl implements StudentService {
 
   public StudentDTO convertRealToDTOStudent(Student student) {
     StudentDTO studentDTO = new StudentDTO();
-    studentDTO.id = student.getId();
     studentDTO.firstName = student.getFirstName();
     studentDTO.lastName = student.getLastName();
     studentDTO.group = student.getGroupId();
@@ -53,6 +52,19 @@ public class StudentServiceImpl implements StudentService {
     return studentDTOs;
   }
 
+  public Long signinStudent(String login, String password) {
+    if(login.contains("@")) {
+      Optional<Student> student = studentRepository.findStudentByEmailAndPassword(login, password);
+      if (student.isPresent()) {
+        return student.get().getId();
+      } else {return 0L;}
+    } else {
+      Optional<Student> student = studentRepository.findStudentByUsernameAndPassword(login, password);
+      if (student.isPresent()) {
+        return student.get().getId();
+      } else {return 0L;}
+    }
+  }
 
   @Override
   public StudentDTO getStudentById(Long id) {

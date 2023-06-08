@@ -25,7 +25,7 @@ public class AssignmentServiceImpl implements AssignmentService {
     if (allAssignments.isEmpty()){
       returnListOfAssignments.add(new AssignmentDTO("Web Programming", "Lab 3", "Make a GUI", "FAF-191", "LAB", "5h", LocalDate.of(2023, 5, 19), "Ana Bejan"));
       returnListOfAssignments.add(new AssignmentDTO( "LFPC", "Project 2", "Convert a final automata into an NFA", "FAF-191", "PROJECT",  "2h", LocalDate.of(2023, 3, 15), "Darius Flocea"));
-      returnListOfAssignments.add(new AssignmentDTO( "Graphic Design", "Chapter 10", "FAF-191", "READING",  "1h", "2023, 03, 13", LocalDate.of(2023, 5, 18), "Matei Corjan"));
+      returnListOfAssignments.add(new AssignmentDTO( "Graphic Design", "Chapter 10", "FAF-191", "FAF-191", "READING",  "1h", LocalDate.of(2023, 5, 18), "Matei Corjan"));
       returnListOfAssignments.add(new AssignmentDTO( "Computation & Complexity", "Gr. Pr. 2", "FAF-191", "PROJECT",  "PROJECT","15h", LocalDate.of(2023, 3, 20), "Anatolii Gheorghiu"));
       return returnListOfAssignments;
     } else {

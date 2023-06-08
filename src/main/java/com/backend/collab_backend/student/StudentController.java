@@ -104,7 +104,7 @@ public class StudentController {
     return ResponseEntity.ok(accomplishmentService.addAccomplishment(studentId, accomplishment, skillType ));
   }
 
-  @PostMapping("/{id}/accomplishments")
+  @GetMapping("/{id}/accomplishments")
   public ResponseEntity<List<Accomplishment>> studentsAccomplishments(@PathVariable("id") Long studentId) {
     logger.info("Searching for accomplishments for student_id[{}]", studentId);
     return ResponseEntity.ok(accomplishmentService.findByStudent(studentId));

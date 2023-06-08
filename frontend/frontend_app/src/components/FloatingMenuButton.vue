@@ -4,23 +4,18 @@
       <div class="plus" style="justify-items: center;">
         <img src="./icons/plus_icon.svg" alt="+" style="height: 6vh; margin-top: 2vh">
       </div>
+      <div class="menu" :class="{ active: menuActive }">
+        <ul>
+          <li><router-link to="/students">Students</router-link></li>
+          <li><router-link @click="fetchData" to="/admin/all_config">View All Configurations</router-link></li>
+          <li><router-link @click="fetchData" to="/admin">Admin Panel</router-link></li>
+          <li><router-link @click="fetchData" to="/teacher_panel_proxy">Teacher Panel</router-link></li>
+          <li><router-link @click="fetchData" to="/assignment_progress">Active Assignments</router-link></li>
+          <li><router-link @click="fetchData" to="/teacher/release_assignment">Release Assignment</router-link></li>
+        </ul>
+      </div>
     </div>
-    <div class="menu" :class="{ active: menuActive }">
-      <ul>
-        <li><router-link to="/students">Students</router-link></li>
-        <li><router-link @click="fetchData" to="/admin/assignment-types">Assignment Types</router-link></li>
-        <li><router-link @click="fetchData" to="/admin/teachers">All teachers</router-link></li>
-        <li><router-link @click="fetchData" to="/admin/skill_types">Skill Types</router-link></li>
-        <li><router-link @click="fetchData" to="/admin/assignment-types">Add assignment type</router-link></li>
-        <li><router-link @click="fetchData" to="/admin/student_groups">Students group</router-link></li>
-        <li><router-link @click="fetchData" to="/admin/all_config">View All Configurations</router-link></li>
-        <li><router-link @click="fetchData" to="/admin">Admin Panel</router-link></li>
-        <li><router-link @click="fetchData" to="/teacher_panel_proxy">Teacher Panel</router-link></li>
-        <li><router-link @click="fetchData" to="/assignment_progress">Active Assignments</router-link></li>
-        <li><router-link @click="fetchData" to="/teacher/release_assignment">Release Assignment</router-link></li>
-      </ul>
 
-    </div>
   </div>
 </template>
 
@@ -85,7 +80,7 @@ export default {
   position: absolute;
   bottom: 17vh;
   right: 8%;
-  background-color: rgba(255, 255, 255, 0.80);
+  background-color: rgba(255, 255, 255, 0.90);
   padding: 1.5%;
   border-radius: 10px;
   display: none;
@@ -96,7 +91,7 @@ export default {
 
 .menu.active {
   display: block;
-  max-width: fit-content;
+  width: 20vw;
   max-height: fit-content;
 }
 

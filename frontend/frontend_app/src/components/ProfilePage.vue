@@ -15,23 +15,26 @@
           </div>
         </div>
       </div>
-      <div style="display: block">
+      <div class="achievements">
+        <h2 style="color: #2c2049">Achievements</h2>
+        <div class="ach_grid" v-for="achievement in achievementData" :key="skillType">
+          <h3 class="ach_type" style="display: inline-flex">{{ achievement.skillType }}</h3>
+          <h3 class="ach_descr" style="display: inline-flex">{{ achievement.studentAccomplishment }}</h3>
+        </div>
       </div>
     </div>
-
-
-
   </div>
-
 </template>
 
 <script>
 import AssignmentsProgress from "./AssignmentsProgress.vue";
 import HorizontalChart from "./HorizontalChart.vue";
+import axios from "axios";
+import DonutChart from "./DonutChart.vue";
 
 export default {
   name: "ProfilePage",
-  components: {HorizontalChart, AssignmentsProgress},
+  components: {DonutChart, HorizontalChart, AssignmentsProgress },
   data() {
     return {
       bars: [
@@ -43,39 +46,46 @@ export default {
         { variant: 'secondary', value: 75 },
         { variant: 'dark', value: 75 }
       ],
-      timer: null
-    }
+      timer: null,
+      achievementData: {}
+    };
   },
   mounted() {
     this.timer = setInterval(() => {
-      this.bars.forEach(bar => (bar.value = 25 + Math.random() * 75))
-    }, 2000)
+      this.bars.forEach(bar => (bar.value = 25 + Math.random() * 75));
+    }, 2000);
+
+    let studentId = localStorage.getItem("userId")
+    axios.get("http://localhost:8081/students/"+studentId+"/accomplishments")
+        .then(response => {
+          this.achievementData = response.data;
+        })
+        .catch(error => {
+          console.error("Error:", error);
+        });
   },
   beforeDestroy() {
-    clearInterval(this.timer)
-    this.timer = null
+    clearInterval(this.timer);
+    this.timer = null;
   }
-}
+};
 </script>
 
 <style scoped>
 .page_elements {
   display: flex;
   flex-direction: column;
-  z-index: -3;
   gap: 2vh;
   position: relative;
-  top: 17vh;
-  display: inline-flex;
-
+  top: 2vh;
 }
+
 .profile_grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   grid-gap: 10vw;
   border-color: #2c3e50;
   position: static;
-  z-index: -3;
   align-items: center;
 }
 
@@ -85,5 +95,53 @@ export default {
   box-shadow: -9px 20px 28px 17px rgba(0, 0, 0, 0.25);
   display: flow;
   position: relative;
+}
+
+.achievements {
+  top: 6vh;
+  margin: auto;
+  box-shadow:  2px 4px 4px rgba(19, 39, 103, 0.25);
+  border-radius: 15px;
+  width: 50%;
+  position: relative;
+  justify-self: center;
+}
+
+.ach_grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-gap: 1vw;
+  border-color: #005fc7;
+  position: inherit;
+  align-items: center;
+}
+
+.ach_type {
+  justify-self: right;
+  color: #2574c2;
+  font-weight: bolder;
+}
+
+.ach_descr {
+  justify-self: left;
+  color: #3e964d;
+}
+
+h1 {
+  max-font-size: 1.5svh;
+}
+
+h2 {
+  margin: 0;
+}
+
+h3 {
+  margin: 0;
+}
+
+ul {
+  list-style-type: disc;
+  margin: 0;
+  padding-left: 2rem;
 }
 </style>

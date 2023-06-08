@@ -12,7 +12,7 @@
     <router-link to="/profile" class="common_link">
         My Profile
     </router-link>
-    <HorizontalChart></HorizontalChart>
+    <HorizontalChart style="margin-top: 4vh; margin-left: 15vw;"></HorizontalChart>
   </div>
   <div id="right_part" class="course-list">
     <div v-for="(course, index) in courses" :key="index" class="course-item">
@@ -35,23 +35,29 @@ export default {
   components: {HorizontalChart, DonutChart, DonutGraph},
   data() {
     return {
-      courses: []
+      courses: [{
+        "name": "Project Management",
+        "image": "http://www.designlab.net.au/wp-content/uploads/project-manager-roll.jpg"
+      }, {
+        "name": "PTR",
+        "image": "https://www.scrapmonster.com/uploads/scrap_equipment/2017/10/4282715093679890.jpg"
+      }, {
+        "name": "LFPC",
+        "image": "https://i.stack.imgur.com/Dd9Iu.jpg"
+      }, {
+        "name": "PR",
+        "image": "https://clipground.com/images/connection-clip-art-2.jpg"
+      }, {
+        "name": "Web Programming",
+        "image": "https://www.givethedogabone.com/blog/wp-content/uploads/2015/08/responsive-web-design.jpg"
+      }
+      ]
     }
   },
   mounted() {
-    this.fetchStudentCourses(5)
   },
   methods: {
-    fetchStudentCourses(studentId) {
-      axios.get("http://localhost:8081/students/".concat(studentId).concat('/courses'))
-          .then(response => {
-            this.courses = response.data;
-            console.log(studentId)
-          })
-          .catch(error => {
-            console.log(error);
-          });
-    }
+
   }
 }
 </script>
@@ -78,6 +84,7 @@ router-link {
 @media (min-width: 1024px) {
   .schedule_graph {
     height: 60vh;
+    margin-left: 10vw;
     margin-top: 2vh;
     margin-right: 5vw;
     margin-bottom: 1rem;
@@ -107,6 +114,7 @@ router-link {
     filter: drop-shadow(-11px 15px 4px rgba(0, 0, 0, 0.25));
   }
   .common_link {
+    margin-left: 2vw;
     position: relative;
     display: inline-flex;
     flex-direction: column;

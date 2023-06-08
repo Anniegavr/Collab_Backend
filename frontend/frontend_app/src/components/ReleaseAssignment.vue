@@ -62,14 +62,14 @@ export default {
   },
   data() {
     return {
-      date: new Date(),
+      date: Date.now(),
     }
   },
   setup() {
     const assignment = ref({
       title: '',
       description: '',
-      group: '',
+      groupId: '',
       type: '',
       time: '',
       date: '',
@@ -80,7 +80,7 @@ export default {
 
     const timeHint = computed(() => 'e.g. 2h 30m');
 
-    const currentTime = new Date().toLocaleString();
+    const currentTime = new Date().toLocaleDateString();
 
     const showWarning = ref(false);
 
@@ -96,7 +96,7 @@ export default {
       if (
           assignment.value.title &&
           assignment.value.description &&
-          assignment.value.group &&
+          assignment.value.groupId &&
           assignment.value.type &&
           assignment.value.time &&
           assignment.value.date
@@ -117,7 +117,7 @@ export default {
       refreshGroups,
       refreshType,
       submit,
-      date: '',
+      date: Date.now(),
       setDate: function (value) {
         this.assignment.value.date = value
       },
@@ -133,7 +133,6 @@ export default {
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  horiz-align: center;
   width: 90%;
   height: 90%;
 }

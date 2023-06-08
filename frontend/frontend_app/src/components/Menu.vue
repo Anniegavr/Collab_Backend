@@ -59,13 +59,12 @@ name = "Menu"
   padding: 10px;
 }
 
-/* we will explain what these classes do next! */
 .collapsed {
-  width: 80px;
+  width: 80vw;
 }
 
 .expanded {
-  width: 350px;
+  width: 35vw;
 }
 
 .profile {
