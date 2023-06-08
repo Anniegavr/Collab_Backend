@@ -7,7 +7,6 @@ package com.backend.collab_backend.assignment;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,9 +21,9 @@ public class AssignmentController {
   private static final Logger logger = LoggerFactory.getLogger(AssignmentController.class);
 
   @GetMapping("/all")
-  public ResponseEntity<List<AssignmentDTO>> findAllAssignments(@RequestBody List<String> groups) {
-    List<AssignmentDTO> returnList = assignmentService.findAllAssignments(groups);
-    logger.info("Assignments that pertain to the groups [{}] are [{}]", groups, returnList.listIterator());
+  public ResponseEntity<List<AssignmentDTO>> findAllAssignments(@RequestBody String group) {
+    List<AssignmentDTO> returnList = assignmentService.findAllByGroup(group);
+    logger.info("Assignments that pertain to the group [{}] are [{}]", group, returnList.listIterator());
     return ResponseEntity.ok(returnList);
   }
 
@@ -42,8 +41,8 @@ public class AssignmentController {
   }
 
   @PutMapping("/{id}")
-  public AssignmentDTO updateAssignment(@PathVariable Long id, @RequestBody AssignmentDTO assignment) {
-    return assignmentService.updateAssignment(id, assignment);
+  public ResponseEntity<AssignmentDTO> updateAssignment(@PathVariable Long id, @RequestBody AssignmentDTO assignment) {
+    return ResponseEntity.ok(assignmentService.updateAssignment(id, assignment));
   }
 
   @DeleteMapping("/{id}")

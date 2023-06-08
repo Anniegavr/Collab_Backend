@@ -1,23 +1,22 @@
 package com.backend.collab_backend.assignment;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
 
-@Getter
-@Setter
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class AssignmentDTO {
-  private String course;
-  private String title;
-  private String description;
-  private String group;
-  private String type;
+  public String course;
+  public String title;
+  public String description;
+  public String group;
+  public String type;
 
   //Estimated total allocated time
-  private String time;
-  private LocalDate dueDate;
-  private String teacherName;
+  public String time;
+  public LocalDate dueDate;
+  public String teacherName;
 }

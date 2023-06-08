@@ -8,6 +8,7 @@ public class StudentDTO {
   public Long id;
   public String firstName;
   public  String lastName;
+  public String group;
   public String email;
   public  String specialty;
   public String year;

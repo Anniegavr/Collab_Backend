@@ -1,9 +1,13 @@
 package com.backend.collab_backend.student;
 
 import com.backend.collab_backend.assignment.Assignment;
+import com.backend.collab_backend.assignment.AssignmentDTO;
+import com.backend.collab_backend.assignment.AssignmentService;
 import com.backend.collab_backend.course.CourseDTO;
 import com.backend.collab_backend.schedule.ScheduleTask;
 import com.backend.collab_backend.student.progress.Progress;
+import com.backend.collab_backend.student.progress.ProgressDTO;
+import com.backend.collab_backend.student.progress.ProgressService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,6 +18,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,6 +29,8 @@ import java.util.List;
 public class StudentController {
   private static final Logger logger = LoggerFactory.getLogger(StudentController.class);
   private final StudentService studentService;
+  private final AssignmentService assignmentService;
+  private final ProgressService progressService;
 
   @GetMapping
   public List<StudentDTO> getAllStudents() {
@@ -38,13 +45,17 @@ public class StudentController {
   }
 
   @GetMapping("/{id}/assignments")
-  public ResponseEntity<List<Assignment>> getAllStudentAssignments(@PathVariable Long id) {
-    List<Assignment> allAssignments = new ArrayList<>();
-//    allAssignments.add(new Assignment( "LFPC", "Lab 3", "FAF-191", "LAB",  "5h", "15.03.2025", "Ana"));
-//    allAssignments.add(new Assignment( "LFPC", "Project 2", "FAF-191", "PROJECT",  "2h", "15.03.2025", "Ana"));
-//    allAssignments.add(new Assignment( "LFPC", "Chapter 10", "FAF-191", "READING",  "1h", "15.03.2025", "Ana"));
-//    allAssignments.add(new Assignment( "LFPC", "Gr. Pr. 2", "FAF-191", "PROJECT",  "15h", "15.03.2025", "Ana"));
-    System.out.println("Received request to view assignments for student_id = "+id);
+  public ResponseEntity<List<AssignmentDTO>> getAllStudentAssignments(@PathVariable Long id) {
+    String group = studentService.getStudentById(id).group;
+    List<AssignmentDTO> allAssignments = assignmentService.findAllByGroup(group);
+    logger.info("Received request to view assignments for student_id[{}]",id);
+    if (allAssignments.isEmpty()) {
+      allAssignments.add(new AssignmentDTO("Web Programming", "Lab 3", "Make a GUI", "FAF-191", "LAB", "5h", LocalDate.of(2023, 5, 19), "Ana Bejan"));
+      allAssignments.add(new AssignmentDTO( "LFPC", "Project 2", "Convert a final automata into an NFA", "FAF-191", "PROJECT",  "2h", LocalDate.of(2023, 3, 15), "Darius Flocea"));
+      allAssignments.add(new AssignmentDTO( "Graphic Design", "Chapter 10", "FAF-191", "READING",  "1h", "2023, 03, 13", LocalDate.of(2023, 5, 18), "Matei Corjan"));
+      allAssignments.add(new AssignmentDTO( "Computation & Complexity", "Gr. Pr. 2", "FAF-191", "PROJECT",  "PROJECT","15h", LocalDate.of(2023, 3, 20), "Anatolii Gheorghiu"));
+    }
+
     return ResponseEntity.ok(allAssignments);
   }
   @GetMapping("/{id}/courses")
@@ -74,16 +85,21 @@ public class StudentController {
     return ResponseEntity.ok(allTasks);
   }
   @GetMapping("/{id}/progress")
-  public ResponseEntity<List<Progress>> getStudentProgressById(@PathVariable Long id) {
-    System.out.println("Received req to see progress for id: "+id);
-    List<Progress> progresses = new ArrayList<>();
-//    progresses.add(new Progress("Chem", 60));
-//    progresses.add(new Progress("Rom", 50));
-//    progresses.add(new Progress("Drom", 30));
-//    progresses.add(new Progress("Baroom", 70));
-//    progresses.add(new Progress("Hakuna", 50));
-//    progresses.add(new Progress("Matana", 50));
-    return ResponseEntity.ok(progresses);
+  public ResponseEntity<List<ProgressDTO>> getStudentProgressById(@PathVariable Long id) {
+    logger.info("Received request to see progress for student_id[{}]",id);
+    List<ProgressDTO> progresses = new ArrayList<>();
+    List<ProgressDTO> progressDTOS = progressService.findAllForStudent(id);
+    if (progressDTOS.isEmpty()) {
+      progresses.add(new ProgressDTO("LFPC Lab 3", 60));
+      progresses.add(new ProgressDTO("Web Programming Lab 5", 50));
+      progresses.add(new ProgressDTO("Real Time Programming Lab 2", 30));
+      progresses.add(new ProgressDTO("Cyber Security Lab 4", 70));
+      progresses.add(new ProgressDTO("Hakuna", 50));
+      progresses.add(new ProgressDTO("Matana", 50));
+      return ResponseEntity.ok(progresses);
+    } else {
+      return ResponseEntity.ok(progressDTOS);
+    }
   }
 
 }
