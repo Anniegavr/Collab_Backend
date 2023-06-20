@@ -7,9 +7,9 @@ public interface StudentService {
   StudentDTO getStudentById(Long id);
 
   StudentDTO createStudent(StudentDTO student);
-  void deleteStudent(Long id);
+  void deleteStudent(String email);
 
   Long signinStudent(String login, String password);
 
-  StudentDTO updateStudent(Long id, StudentDTO student);
+  StudentDTO updateStudent(String email, StudentDTO student);
 }

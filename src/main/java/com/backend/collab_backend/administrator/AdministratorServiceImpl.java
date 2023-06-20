@@ -32,22 +32,18 @@ public class AdministratorServiceImpl implements AdministratorService{
 
   public AdministratorDTO convertRealToDTOAdmin(Administrator administrator) {
     AdministratorDTO adminDTO = new AdministratorDTO();
-    adminDTO.id = administrator.getId();
     adminDTO.firstName = administrator.getFirstName();
     adminDTO.lastName = administrator.getLastName();
     adminDTO.email = administrator.getEmail();
-    adminDTO.role = administrator.getRole();
-    adminDTO.secondRole = administrator.getSecondRole();
-    adminDTO.thirdRole = administrator.getThirdRole();
-    adminDTO.username = administrator.getUsername();
     adminDTO.specialty = administrator.getSpecialty();
     return adminDTO;
   }
 
 
   @Override
-  public Administrator getAdministratorByAdministratorId(Long id) {
-    return administratorRepository.findById(id).get();
+  public Administrator getAdministratorByAdministratorEmail(String email) {
+    Optional<Administrator> admin = administratorRepository.findAdministratorByEmail(email);
+    return admin.orElseGet(Administrator::new);
   }
 
   public Long signinAdmin(String login, String password) {
@@ -78,17 +74,31 @@ public class AdministratorServiceImpl implements AdministratorService{
     administrator.setEmail(administratorDTO.email);
     System.out.println(administratorDTO.email);
     administrator.setSpecialty(administratorDTO.specialty);
-    administrator.setRole(administratorDTO.role);
-    administrator.setSecondRole(administratorDTO.secondRole);
-    administrator.setThirdRole(administratorDTO.thirdRole);
-    administrator.setUsername(administratorDTO.username);
+    administrator.setUsername(administratorDTO.firstName.charAt(0)+administratorDTO.lastName);
     return administrator;
   }
 
-
+  public AdministratorDTO editAdmin(String email, AdministratorDTO administratorDTO) {
+    Optional<Administrator> administratorOptional = administratorRepository.findAdministratorByEmail(email);
+    if (administratorOptional.isPresent()) {
+      Administrator administrator = administratorOptional.get();
+      administrator.setEmail(administratorDTO.email);
+      administrator.setSpecialty(administratorDTO.specialty);
+      administrator.setUsername(administratorDTO.firstName+administratorDTO.lastName);
+      administrator.setFirstName(administratorDTO.firstName);
+      administrator.setLastName(administratorDTO.lastName);
+      System.out.println("Saving edited admin");
+      administratorRepository.save(administrator);
+    }
+    return administratorDTO;
+  }
   @Override
-  public ResponseEntity.BodyBuilder deleteAdministrator(Long id) {
-    administratorRepository.deleteById(id);
+  public ResponseEntity.BodyBuilder deleteAdministrator(String email) {
+    Optional<Administrator> administratorOptional = administratorRepository.findAdministratorByEmail(email);
+    if (administratorOptional.isPresent()) {
+      Administrator administrator = administratorOptional.get();
+      administratorRepository.deleteById(administrator.getId());
+    }
     return ResponseEntity.ok();
   }
 }

@@ -6,8 +6,10 @@ import java.util.List;
 
 public interface AdministratorService {
   List<AdministratorDTO> getAllAdministrators();
-  Administrator getAdministratorByAdministratorId(Long id);
+  Administrator getAdministratorByAdministratorEmail(String email);
   Long signinAdmin(String login, String password);
   AdministratorDTO createAdministrator(AdministratorDTO administrator);
-  ResponseEntity.BodyBuilder deleteAdministrator(Long id);
+  ResponseEntity.BodyBuilder deleteAdministrator(String email);
+
+  AdministratorDTO editAdmin(String email, AdministratorDTO administratorDTO);
 }

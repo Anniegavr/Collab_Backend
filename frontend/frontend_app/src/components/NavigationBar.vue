@@ -152,7 +152,7 @@ export default {
   top: 0;
   bottom: 0vh;
   left: 0;
-  background-color: #e4f6fc;
+  background-color: hsl(245.77deg 100% 97.79%);
   padding: 1.5%;
   border-radius: 0 10px;
   filter: drop-shadow(-5px 8px 5px rgba(0, 0, 0, 0.25));

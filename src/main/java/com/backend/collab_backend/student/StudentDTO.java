@@ -10,6 +10,6 @@ public class StudentDTO {
   public String group;
   public String email;
   public  String specialty;
-  public String year;
+  public Integer year;
   public String role = ERole.STUDENT.name();
 }

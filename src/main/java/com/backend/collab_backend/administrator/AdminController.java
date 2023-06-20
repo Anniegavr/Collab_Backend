@@ -97,14 +97,14 @@ public class AdminController {
     logger.info("Creating new student: {} {}", student.firstName, student.lastName);
     return ResponseEntity.ok(studentService.createStudent(student));
   }
-  @PutMapping("/update_student/{id}")
-  public ResponseEntity<StudentDTO> updateStudent(@PathVariable Long id, @RequestBody StudentDTO student) {
-    StudentDTO studentDTO = studentService.updateStudent(id, student);
+  @PutMapping("/update_student/{email}")
+  public ResponseEntity<StudentDTO> updateStudent(@PathVariable String email, @RequestBody StudentDTO student) {
+    StudentDTO studentDTO = studentService.updateStudent(email, student);
     if(!studentDTO.equals(new StudentDTO())) {
-      logger.info("Student with ID {} updated", id);
+      logger.info("Student with ID {} updated", email);
       return ResponseEntity.ok(studentDTO);
     }
-    logger.info("Student with ID {} not found", id);
+    logger.info("Student with ID {} not found", email);
     return ResponseEntity.noContent().build();
   }
 
@@ -147,10 +147,10 @@ public class AdminController {
     System.out.println("Got request for "+request);
     return ResponseEntity.ok("Success");
   }
-  @DeleteMapping("/del_student/{id}")
-  public void deleteStudent(@PathVariable Long id) {
-    logger.info("Deleting student with ID {}", id);
-    studentService.deleteStudent(id);
+  @DeleteMapping("/del_student/{email}")
+  public void deleteStudent(@PathVariable String email) {
+    logger.info("Deleting student with email {}", email);
+    studentService.deleteStudent(email);
   }
   @GetMapping("/all_admins")
   public ResponseEntity<List<AdministratorDTO>> getAllAdministrators() {
@@ -162,16 +162,25 @@ public class AdminController {
     logger.info("Received request to get total website requests");
     return ResponseEntity.ok("3,489,744");
   }
-  @GetMapping("/admin/{id}")
-  public ResponseEntity<String> getAdministratorByAdministratorId(@PathVariable Long id) {
-    logger.info("Received request to get administrator by ID: {}", id);
-    administratorService.getAdministratorByAdministratorId(id);
+  @GetMapping("/admin/{email}")
+  public ResponseEntity<String> getAdministratorByAdministratorId(@PathVariable String email) {
+    logger.info("Received request to get administrator by ID: {}", email);
+    administratorService.getAdministratorByAdministratorEmail(email);
     return ResponseEntity.ok("JonathanD: Dean, HR Manager");
   }
-  @DeleteMapping("/delete_admin/{id}")
-  public ResponseEntity<String> deleteAdministrator(@PathVariable Long id) {
-    administratorService.deleteAdministrator(id);
-    logger.info("Received request to delete administrator with ID: {}", id);
-    return ResponseEntity.ok("Success, you deleted admin with ID "+id);
+  @DeleteMapping("/delete_admin/{email}")
+  public ResponseEntity<String> deleteAdministrator(@PathVariable String email) {
+    administratorService.deleteAdministrator(email);
+    logger.info("Received request to delete administrator with email: {}", email);
+    return ResponseEntity.ok("Success, you deleted admin with email "+email);
+  }
+
+  @PutMapping("/edit_admin/{email}")
+  public ResponseEntity<AdministratorDTO> editAdmin(@PathVariable String email, @RequestBody AdministratorDTO administratorDTO) {
+    logger.info("Updating admin[{}]", administratorDTO.email);
+    AdministratorDTO administratorDTO1 = administratorService.editAdmin(email, administratorDTO);
+    logger.info("Now, admin has values [{}]", administratorDTO1);
+    System.out.println("Edited admin");
+    return ResponseEntity.ok(administratorDTO1);
   }
 }

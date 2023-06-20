@@ -63,36 +63,48 @@ export default {
           });
     },
     editTeacher(teacher) {
-      // Find the index of the user to edit
+      // Find the index of the teacher to edit
       const index = this.fetchedTeachers.indexOf(teacher);
-      // If the user is found
+
+      // If the teacher is found
       if (index !== -1) {
-        // Prompt the user to enter the new name and email
-        console.log(teacher)
+        // Prompt the user to enter the new details
+        console.log(teacher);
         const newFirstName = prompt('Enter the new firstname:', teacher.firstName);
         const newLastName = prompt('Enter the new lastname:', teacher.lastName);
         const newEmail = prompt('Enter the new email:', teacher.email);
         const newSpecialty = prompt('Enter the new specialty:', teacher.specialty);
-        // If the user entered a new name and email
-        if (newFirstName & newLastName & newEmail & newSpecialty) {
+
+        // If the user entered new details
+        if (
+            newFirstName.trim() !== '' &&
+            newLastName.trim() !== '' &&
+            newEmail.trim() !== '' &&
+            newSpecialty.trim() !== ''
+        ) {
           const teacherToEdit = {
-            "firstName": newFirstName,
-            "lastName": newLastName,
-            "email": newEmail,
-            "specialty": newSpecialty,
-          }
-          // Update the user object with the new name and email
-          axios.post("http://localhost:8081/admin/update_teacher/"+teacher.email, teacherToEdit)
+            firstName: newFirstName,
+            lastName: newLastName,
+            email: newEmail,
+            specialty: newSpecialty,
+          };
+
+          // Update the teacher object with the new details
+          axios
+              .post('http://localhost:8081/admin/update_teacher/' + teacher.email, teacherToEdit)
               .then(response => {
-                this.fetchTeachers()
-                console.log("Modified types: ".concat(response.data))
+                this.fetchTeachers();
+                console.log('Modified types: '.concat(response.data));
               })
               .catch(error => {
-                this.fetchedTeachers[index] = teacherToEdit
-                alert("Success")
-                console.log(error)
-              })
-          this.fetchTeachers()
+                this.fetchedTeachers[index] = teacherToEdit;
+                alert('Success');
+                console.log(error);
+              });
+
+          this.fetchTeachers();
+        } else {
+          alert('Error: All fields must have a value');
         }
       }
     },
@@ -116,27 +128,40 @@ export default {
         }
       }
     },
-    addTeacher(){
+    addTeacher() {
       const firstName = prompt('Enter the firstname:');
       const lastName = prompt('Enter the lastname:');
       const email = prompt('Enter the email:');
       const specialty = prompt('Enter the specialty:');
-      const newTeacher = {
-        "firstName": firstName,
-        "lastName": lastName,
-        "email": email,
-        "specialty": specialty
+
+      // Check if all fields have letters
+      if (
+          firstName.trim() !== '' &&
+          lastName.trim() !== '' &&
+          email.trim() !== '' &&
+          specialty.trim() !== ''
+      ) {
+        const newTeacher = {
+          firstName: firstName,
+          lastName: lastName,
+          email: email,
+          specialty: specialty,
+        };
+
+        axios
+            .post('http://localhost:8081/admin/add_teacher', newTeacher)
+            .then(response => {
+              this.fetchTeachers();
+              console.log('Added teacher: '.concat(response.data));
+            })
+            .catch(error => {
+              this.fetchedTeachers.push(newTeacher);
+              alert('Success');
+              console.log(error);
+            });
+      } else {
+        alert('Error: All fields must contain letters');
       }
-      axios.post("http://localhost:8081/admin/add_teacher", newTeacher)
-          .then(response => {
-            this.fetchTeachers()
-            console.log("Added teacher: ".concat(response.data))
-          })
-          .catch(error => {
-            this.fetchedTeachers.push(newTeacher)
-            alert("Success")
-            console.log(error)
-          })
     }
   },
 }

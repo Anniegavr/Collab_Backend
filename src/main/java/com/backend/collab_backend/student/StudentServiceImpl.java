@@ -24,18 +24,19 @@ public class StudentServiceImpl implements StudentService {
     studentDTO.group = student.getGroupId();
     studentDTO.email = student.getEmail();
     studentDTO.specialty = student.getSpecialty();
-    studentDTO.year = Integer.toString(student.getYear());
+    studentDTO.year = student.getYear();
     return studentDTO;
   }
 
   public Student convertDTOtoRealStudent(StudentDTO studentDTO) {
-    Student student = new Student();
+    Student student = studentRepository.findStudentByEmail(studentDTO.email).get();
+    System.out.println("Converting student DTO to real: "+student.getId());
     student.setFirstName(studentDTO.firstName);
     student.setLastName(studentDTO.lastName);
     student.setGroupId(studentDTO.group);
     student.setEmail(studentDTO.email);
     student.setSpecialty(studentDTO.specialty);
-    student.setYear(Integer.parseInt(studentDTO.year));
+    student.setYear(studentDTO.year);
     return student;
   }
 
@@ -83,22 +84,34 @@ public class StudentServiceImpl implements StudentService {
   }
 
   @Override
-  public void deleteStudent(Long id) {
-    logger.info("Deleting student with id [{}] and email [{}]", id, studentRepository.findStudentById(id).get().getEmail());
-    studentRepository.deleteStudentById(id);
+  public void deleteStudent(String email) {
+    Optional<Student> studentOptional = studentRepository.findStudentByEmail(email);
+    if (studentOptional.isPresent()) {
+      Student student = studentOptional.get();
+      logger.info("Deleting student with id [{}] and email [{}]", student.getId(), student.getEmail());
+      studentRepository.deleteStudentById(student.getId());
+    }
+
   }
 
   @Override
-  public StudentDTO updateStudent(Long id, StudentDTO student){
-    Optional<Student> studentToUpdate = studentRepository.findStudentById(id);
+  public StudentDTO updateStudent(String email, StudentDTO student){
+    Optional<Student> studentToUpdate = studentRepository.findStudentByEmail(email);
     if(studentToUpdate.isEmpty()){
-      logger.info("Updating student: couldn't find student with id[{}] and email[{}]", id, student.email);
+      System.out.println("Could not update student");
+      logger.info("Updating student: couldn't find student with email[{}]", student.email);
       return new StudentDTO();
     }
-    studentRepository.deleteById(studentToUpdate.get().getId());
-    Student studentToUpdateNew = convertDTOtoRealStudent(student);
-    studentToUpdateNew.setId(id);
-    logger.info("Updating student with id[{}] and email[{}]. New email (if changed): {}", id, student.email, studentToUpdate.get().getEmail());
+    System.out.println("Updating student "+student.email);
+    Student studentToUpdateNew = studentToUpdate.get();
+    studentToUpdateNew.setFirstName(student.firstName);
+    studentToUpdateNew.setLastName(student.lastName);
+    studentToUpdateNew.setGroupId(student.group);
+    studentToUpdateNew.setEmail(student.email);
+    studentToUpdateNew.setSpecialty(student.specialty);
+    studentToUpdateNew.setYear(student.year);
+    System.out.println("Saving student to db: "+ studentToUpdateNew.getId());
+    logger.info("Updating student email[{}]. New email (if changed): {}",student.email, studentToUpdate.get().getEmail());
     studentRepository.save(studentToUpdateNew);
     return student;
   }

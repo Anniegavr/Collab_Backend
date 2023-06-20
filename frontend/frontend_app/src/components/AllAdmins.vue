@@ -5,7 +5,6 @@
       <table class="common_table">
         <thead>
         <tr>
-          <th><span>ID</span></th>
           <th><span>First Name</span></th>
           <th><span>Last Name</span></th>
           <th><span>Email</span></th>
@@ -14,8 +13,7 @@
         </tr>
         </thead>
         <tbody>
-        <tr v-for="admin in filteredAdmins" :key="admin.id">
-          <td>{{admin.id.toString()}}</td>
+        <tr v-for="admin in filteredAdmins" :key="admin.email">
           <td>{{admin.firstName}}</td>
           <td>{{admin.lastName}}</td>
           <td>{{ admin.email }}</td>
@@ -71,44 +69,46 @@ export default {
     },
     editAdmin(admin) {
       // Find the index of the user to edit
-      const index = this.admins.findIndex(u => u.id === admin.id);
+      const index = this.admins.findIndex(u => u.email === admin.email);
       // If the user is found
       if (index !== -1) {
         const newFirstName = prompt('Enter the new firstname:', admin.firstName);
         const newLastName = prompt('Enter the new lastname:', admin.lastName);
         const newEmail = prompt('Enter the new email:', admin.email);
-        const newSpecialty = prompt('Enter the new email:', admin.specialty);
+        const newSpecialty = prompt('Enter the new specialty:', admin.specialty);
         // If the user entered a new name and email
-        if (newFirstName || newLastName || newEmail || newSpecialty) {
-          // Update the user object with the new name and email
-          this.admins[index].firstName = newFirstName;
-          this.admins[index].lastName = newLastName;
-          this.admins[index].email = newEmail;
-          this.admins[index].specialty = newSpecialty;
+        if (newFirstName.trim() !== '' &&
+            newLastName.trim() !== '' &&
+            newEmail.trim() !== '' &&
+            newSpecialty.trim() !== '') {
           const adminToEdit = {
-            "id": admin.id,
             "firstName": newFirstName,
             "lastName": newLastName,
             "email": newEmail,
             "specialty": newSpecialty,
           }
-          axios.put('http://localhost:8081/admin/'+adminToEdit.id, adminToEdit)
+          axios.put('http://localhost:8081/admin/edit_admin/'+admin.email, adminToEdit)
               .then(response => {
                 this.admins = this.fetchAdmins()
                 console.log(response.status+"\n "+response.data)
               })
               .catch(error => {
+                // Update the user object with the new name and email
+                this.admins[index].firstName = newFirstName;
+                this.admins[index].lastName = newLastName;
+                this.admins[index].email = newEmail;
+                this.admins[index].specialty = newSpecialty;
                 console.log(error);
               });
         }
       }
     },
     deleteAdmin(admin) {
-      const index = this.admins.indexOf(admin);
+      const index = this.admins.findIndex(u => u.email === admin.email);
       if (index !== -1) {
         const confirmed = confirm(`Are you sure you want to delete ${admin.firstName} ${admin.lastName} ?`);
         if (confirmed) {
-          axios.delete('http://localhost:8081/admin/'+ admin.id)
+          axios.delete('http://localhost:8081/admin/delete_admin/'+ admin.email)
               .then(response => {
                 this.admins = this.fetchAdmins()
                 console.log(response.status+"\n "+response.data)
