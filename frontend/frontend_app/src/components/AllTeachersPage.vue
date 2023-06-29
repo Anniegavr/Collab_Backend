@@ -64,7 +64,7 @@ export default {
     },
     editTeacher(teacher) {
       // Find the index of the teacher to edit
-      const index = this.fetchedTeachers.indexOf(teacher);
+      const index = this.fetchedTeachers.findIndex((s) => s.email === teacher.email);
 
       // If the teacher is found
       if (index !== -1) {
@@ -82,6 +82,7 @@ export default {
             newEmail.trim() !== '' &&
             newSpecialty.trim() !== ''
         ) {
+          console.log("Proceed with teacher to edit")
           const teacherToEdit = {
             firstName: newFirstName,
             lastName: newLastName,
@@ -109,8 +110,9 @@ export default {
       }
     },
     deleteTeacher(teacher) {
-      const index = this.fetchedTeachers.indexOf(teacher);
+      const index = this.fetchedTeachers.findIndex((s) => s.email === teacher.email);
       if (index !== -1) {
+        console.log("Deleting teacher "+teacher.email)
         const confirmed = confirm(`Are you sure you want to delete ${teacher.firstName} ${teacher.lastName} ?`);
         if (confirmed) {
           axios.delete("http://localhost:8081/admin/delete_teacher/"+ teacher.email)

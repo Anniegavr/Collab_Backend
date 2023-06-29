@@ -75,6 +75,8 @@ public class TeacherServiceImpl implements TeacherService {
     teacherToBSaved.setRole(ERole.TEACHER.name());
     teacherToBSaved.setSpecialty(teacher.specialty);
     teacherRepository.save(teacherToBSaved);
+    teacherToBSaved.setUsername(teacher.firstName.charAt(0)+teacher.lastName);
+    teacherRepository.save(teacherToBSaved);
     return ResponseEntity.ok("Created teacher: "+teacher);
   }
 

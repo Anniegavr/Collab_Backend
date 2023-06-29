@@ -5,5 +5,7 @@ import java.util.List;
 public interface StudentGroupService {
   List<StudentGroupDTO> getAllGroups();
 
+  StudentGroupDTO editGroup(String name, StudentGroupDTO studentGroupDTO);
+
   void deleteGroup(String id);
 }

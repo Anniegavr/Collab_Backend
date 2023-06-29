@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -25,6 +26,22 @@ public class StudentGroupServiceImpl implements StudentGroupService {
     return allGroupsDTOs;
   }
 
+  public StudentGroupDTO editGroup(String name, StudentGroupDTO studentGroupDTO) {
+    Optional<StudentGroup> studentGroupOptional = studentGroupRepository.findStudentGroupByGroupId(name);
+    StudentGroup studentGroup;
+    if (studentGroupOptional.isPresent()) {
+      studentGroup = studentGroupOptional.get();
+      studentGroup.setGroupId(studentGroupDTO.name);
+      studentGroup.setEmail(studentGroupDTO.email);
+      studentGroup.setYear(studentGroupDTO.year);
+      studentGroup.setSpecialty(studentGroupDTO.specialty);
+      studentGroup.setFreeTime(studentGroupDTO.freeTime);
+      studentGroup.setTripTime(studentGroupDTO.tripTime);
+      studentGroup.setStartYear(studentGroupDTO.startYear);
+      studentGroupRepository.save(studentGroup);
+    }
+    return studentGroupDTO;
+  }
   @Override
   public void deleteGroup(String id) {
     studentGroupRepository.deleteById(id);
