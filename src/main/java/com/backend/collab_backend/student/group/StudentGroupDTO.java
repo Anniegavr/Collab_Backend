@@ -7,6 +7,8 @@ public class StudentGroupDTO {
   public int startYear;
   public int tripTime;
   public int freeTime;
+  public int sleepTime;
+  public int classTime;
   public int year;
 
   public StudentGroupDTO(String name,
@@ -15,6 +17,8 @@ public class StudentGroupDTO {
                          int startYear,
                          int tripTime,
                          int freeTime,
+                         int sleepTime,
+                         int classTime,
                          int year) {
     this.name = name;
     this.email = email;
@@ -22,6 +26,8 @@ public class StudentGroupDTO {
     this.startYear = startYear;
     this.tripTime = tripTime;
     this.freeTime = freeTime;
+    this.sleepTime = sleepTime;
+    this.classTime =classTime;
     this.year = year;
   }
 }

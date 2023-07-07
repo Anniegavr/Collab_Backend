@@ -14,18 +14,18 @@
   </div>
   <div class="column_container">
     <div class="calendar-container">
-      <div class="calendar">
+      <div class="calendar" style="z-index: -1">
         <VDatePicker v-model="date" @change="setDate"/>
       </div>
     </div>
-    <div id="pending_assignments" style="margin-top: 3vh">
+    <div id="pending_assignments" style="margin-top: 6vh">
       <div class="legend">
         <span class="lab">LAB</span>
         <span class="project">PROJECT</span>
         <span class="reading">READING</span>
       </div>
       <div v-for="assignment in assignments" :key="assignment.id" class="assignments_list">
-        <p :class="['one_assignment', assignment.type]">{{assignment.title}} <br> {{assignment.description}}</p>
+        <p :class="['one_assignment', assignment.type]">Course: {{assignment.course}} <br> --------- <br> {{assignment.title}} <br> --------- <br> {{assignment.description}}</p>
       </div>
     </div>
   </div>

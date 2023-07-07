@@ -45,4 +45,10 @@ public class SkillController {
     return ResponseEntity.ok(skillService.updateSkill(skillName, newName));
   }
 
+  @PostMapping("/add")
+  public ResponseEntity<String> addSkill(String skill) {
+    skillService.addSkill(skill);
+    return ResponseEntity.ok(skill);
+  }
+
 }

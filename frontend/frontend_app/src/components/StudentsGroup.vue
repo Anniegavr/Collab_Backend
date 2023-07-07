@@ -41,6 +41,7 @@ import SearchField from "./SearchField.vue";
 import SearchIcon from "./SearchIcon.vue";
 import axios from "axios";
 import {Group} from "../models/Group.ts";
+import {useToast} from "vue-toastification";
 
 export default {
   name: "AddGroup",
@@ -76,6 +77,49 @@ export default {
             console.log(error);
           });
     },
+    addStudentGroup() {
+      const newName = prompt('Enter the name:');
+      const newEmail = prompt('Enter the email:');
+      const newStartYear = prompt('Enter the start year:');
+      const newSpecialty = prompt('Enter the specialty:');
+      const newFreeTime = prompt('Enter free time: ');
+      const newTripTime = prompt('Enter trip time: ');
+      const newYear = prompt('Enter the year: ');
+
+      // Check if all fields have letters
+      if (
+          newName.trim() !== '' &&
+          newEmail.trim() !== '' &&
+          newStartYear.trim() !== '' &&
+          newFreeTime.trim() !== '' &&
+          newSpecialty.trim() !== '' &&
+          newTripTime.trim() !== ''
+      ) {
+        const newStudentGroup = {
+          name: newName,
+          email: newEmail,
+          startYear: newStartYear,
+          specialty: newSpecialty,
+          freeTime: newFreeTime,
+          tripTime: newTripTime,
+          year: newYear,
+        };
+
+        axios
+            .post('http://localhost:8081/admin/student_groups/add', newStudentGroup)
+            .then(response => {
+              this.studentGroups = this.fetchStudentGroups();
+              const toast = useToast();
+              toast.success('Group added successfully');
+              console.log('Added student: '.concat(response.data));
+            })
+            .catch(error => {
+              this.studentGroups.push(newStudentGroup);
+              alert('Success');
+              console.log(error);
+            });
+      }
+    },
     editStudentGroup(studentGroup) {
       // Find the index of the user to edit
       const index = this.studentGroups.findIndex((s) => s.name === studentGroup.name);
@@ -104,6 +148,8 @@ export default {
         axios.put("http://localhost:8081/admin/student_groups/edit/"+studentGroup.name, newStudentGroup)
             .then(response => {
               this.studentGroups[index] = this.fetchStudentGroups();
+              const toast = useToast();
+              toast.success('Group updated successfully');
               console.log("Modified types: ".concat(response.data))
             })
             .catch(error => {
@@ -111,22 +157,22 @@ export default {
               alert("Success")
               console.log(error)
             })
-
-
       }
     },
     deleteStudentGroup(studentGroup) {
       // Find the index of the user to delete
-      const index = this.studentGroups.findIndex(studentGroup.email === studentGroup.id);
+      const index = this.studentGroups.findIndex((s) => s.name === studentGroup.name);
       // If the user is found
       if (index !== -1) {
         // Prompt the user to confirm the deletion
         const confirmed = confirm(`Are you sure you want to delete ${studentGroup.name}?`);
         // If the user confirms the deletion
         if (confirmed) {
-          axios.delete("http://localhost:8081/admin/studentGroups/delete/"+ studentGroup.id)
+          axios.delete("http://localhost:8081/admin/groups/"+ studentGroup.name+"/delete")
               .then(response => {
                 this.studentGroups = this.fetchStudentGroups()
+                const toast = useToast();
+                toast.success('Group deleted successfully');
                 console.log("Modified types: ".concat(response.data))
               })
               .catch(error => {
@@ -134,7 +180,6 @@ export default {
                 alert("Success")
                 console.log(error)
               })
-
         }
       }
     },

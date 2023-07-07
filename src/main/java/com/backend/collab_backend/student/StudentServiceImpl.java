@@ -1,5 +1,6 @@
 package com.backend.collab_backend.student;
 
+import com.backend.collab_backend.role.ERole;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -29,7 +30,9 @@ public class StudentServiceImpl implements StudentService {
   }
 
   public Student convertDTOtoRealStudent(StudentDTO studentDTO) {
-    Student student = studentRepository.findStudentByEmail(studentDTO.email).get();
+    Optional<Student> studentOptional = studentRepository.findStudentByEmail(studentDTO.email);
+    Student student;
+    student = studentOptional.orElseGet(Student::new);
     System.out.println("Converting student DTO to real: "+student.getId());
     student.setFirstName(studentDTO.firstName);
     student.setLastName(studentDTO.lastName);
@@ -78,6 +81,7 @@ public class StudentServiceImpl implements StudentService {
   public StudentDTO createStudent(StudentDTO student) {
     Student student1 = convertDTOtoRealStudent(student);
     student1.setUsername(student1.getFirstName().toLowerCase().charAt(0)+student1.getLastName().toLowerCase());
+    student1.setRole(ERole.STUDENT.name());
     logger.info("Saving new student with username [{}]", student1.getUsername());
     studentRepository.save(student1);
     return student;
@@ -97,13 +101,19 @@ public class StudentServiceImpl implements StudentService {
   @Override
   public StudentDTO updateStudent(String email, StudentDTO student){
     Optional<Student> studentToUpdate = studentRepository.findStudentByEmail(email);
-    if(studentToUpdate.isEmpty()){
-      System.out.println("Could not update student");
+    Optional<Student> studentOptional = studentRepository.findStudentByUsername(student.firstName.charAt(0)+student.lastName);
+    if(studentToUpdate.isEmpty() && studentOptional.isEmpty()){
+      System.out.println("Could not update student "+student.email+" | "+student.firstName.charAt(0)+student.lastName);
       logger.info("Updating student: couldn't find student with email[{}]", student.email);
       return new StudentDTO();
     }
+    Student studentToUpdateNew = null;
+    if (studentToUpdate.isPresent()) {
+      studentToUpdateNew = studentToUpdate.get();
+    } else if (studentOptional.isPresent()) {
+      studentToUpdateNew = studentOptional.get();
+    }
     System.out.println("Updating student "+student.email);
-    Student studentToUpdateNew = studentToUpdate.get();
     studentToUpdateNew.setFirstName(student.firstName);
     studentToUpdateNew.setLastName(student.lastName);
     studentToUpdateNew.setGroupId(student.group);

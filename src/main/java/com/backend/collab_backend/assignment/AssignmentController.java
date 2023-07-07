@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/assignments")
 @CrossOrigin(origins = "*")
+@RequestMapping("/assignments")
 @RequiredArgsConstructor
 public class AssignmentController {
   private final AssignmentService assignmentService;
@@ -37,7 +37,7 @@ public class AssignmentController {
 
   @PostMapping("/new")
   public ResponseEntity<AssignmentDTO> createAssignment(@RequestBody AssignmentDTO assignment) {
-    assignmentService.createAssignment(assignment);
+    AssignmentDTO assignmentDTO = assignmentService.createAssignment(assignment);
     return ResponseEntity.ok(assignment);
   }
 

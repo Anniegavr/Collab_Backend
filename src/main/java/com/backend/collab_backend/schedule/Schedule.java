@@ -38,6 +38,6 @@ public class Schedule {
   private String freeTimeLeft;
   @Column(nullable = false)
   private String groupId;
-  private Long assignmentId;
+  private Long assignmentSetId;
 
 }

@@ -1,5 +1,6 @@
 package com.backend.collab_backend.schedule;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface ScheduleService {
@@ -7,6 +8,10 @@ public interface ScheduleService {
   Schedule updateSchedule(Long scheduleId, Schedule schedule);
   void deleteSchedule(Long scheduleId);
   Schedule getScheduleById(Long scheduleId);
+
+  List<Schedule> getScheduleByGroupId(String groupId);
+
+  Schedule getScheduleByGroupIdAndDate(String groupId, LocalDate date);
   List<Schedule> getAllSchedules();
   /**
    * Get the progress of an assignment for a specific student.

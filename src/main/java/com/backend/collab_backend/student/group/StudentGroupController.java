@@ -4,10 +4,13 @@ import com.backend.collab_backend.administrator.AdminController;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,13 +33,19 @@ public class StudentGroupController {
     logger.info("Fetching all groups...");
     if (groups.isEmpty()) {
       logger.info("No groups registered.");
-      groups.add(new StudentGroupDTO( "FAF-191", "faf-191fcim@UTM.onmicrosoft.com", "Software Engineering", 2019, 2, 5, 4));
-      groups.add(new StudentGroupDTO( "FAF-192", "faf-192fcim@UTM.onmicrosoft.com", "Software Engineering", 2019, 2, 5, 4));
-      groups.add(new StudentGroupDTO( "FAF-193", "faf-193fcim@UTM.onmicrosoft.com", "Software Engineering", 2019, 2, 5, 4));
-      groups.add(new StudentGroupDTO("FAF-194", "faf-194fcim@UTM.onmicrosoft.com", "Software Engineering", 2019, 2, 5, 4));
+      groups.add(new StudentGroupDTO( "FAF-191", "faf-191fcim@UTM.onmicrosoft.com", "Software Engineering", 2019, 2, 5, 7, 3, 4));
+      groups.add(new StudentGroupDTO( "FAF-192", "faf-192fcim@UTM.onmicrosoft.com", "Software Engineering", 2019, 2, 5, 7, 3, 4));
+      groups.add(new StudentGroupDTO( "FAF-193", "faf-193fcim@UTM.onmicrosoft.com", "Software Engineering", 2019, 2, 5, 7, 3, 4));
+      groups.add(new StudentGroupDTO("FAF-194", "faf-194fcim@UTM.onmicrosoft.com", "Software Engineering", 2019, 2, 5, 7, 3,4));
     }
     logger.info("Fetched [{}] groups.", groups.size());
     return ResponseEntity.ok(groups);
+  }
+
+  @PostMapping("/add")
+  public ResponseEntity<StudentGroupDTO> addGroup(@RequestBody StudentGroupDTO studentGroupDTO) {
+    logger.info("Added group: [{}]", studentGroupDTO.name);
+    return ResponseEntity.ok(studentGroupService.addGroup(studentGroupDTO));
   }
 
   @PutMapping("/edit/{name}")
@@ -45,5 +54,11 @@ public class StudentGroupController {
     StudentGroupDTO editedGroup = studentGroupService.editGroup(name, studentGroupDTO);
     logger.info("Updated group.");
     return ResponseEntity.ok(editedGroup);
+  }
+
+  @DeleteMapping("/groups/{id}/delete")
+  public ResponseEntity deleteGroup(@PathVariable("id") String groupId) {
+    studentGroupService.deleteGroup(groupId);
+    return new ResponseEntity<>(HttpStatus.OK);
   }
 }

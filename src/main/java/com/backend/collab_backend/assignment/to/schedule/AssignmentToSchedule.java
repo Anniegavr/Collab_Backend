@@ -1,6 +1,9 @@
+//*************************************************//
+//          INTHER LOGISTICS ENGINEERING           //
+//*************************************************//
+
 package com.backend.collab_backend.assignment.to.schedule;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -10,6 +13,10 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
+/**
+ * @author agavrilita
+ * @since 7/4/2023
+ */
 @Entity
 @Getter
 @Setter
@@ -26,10 +33,8 @@ public class AssignmentToSchedule {
   )
   @Id
   private Long id;
-  @Column(nullable = false)
-  private Long groupId;
-  private Long assignmentId;
-  @Column(nullable = false)
+
   private Long scheduleId;
+  private Long assignmentSetId;
 
 }

@@ -24,7 +24,8 @@ export default {
       "#29cac4", "#2c3e50", "#7fca29", "#bfbed7"];
       const myData = []
       const myLabel = []
-      axios.get('http://localhost:8081/students/5/schedule')
+      const studentId = localStorage.getItem("userId")
+      axios.get('http://localhost:8081/students/'+studentId+'/schedule')
           .then(response => {
             const data = response.data
             console.log(response.data)

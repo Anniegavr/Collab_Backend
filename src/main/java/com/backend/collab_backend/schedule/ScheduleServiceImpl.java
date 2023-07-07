@@ -1,8 +1,7 @@
 package com.backend.collab_backend.schedule;
 
-import com.backend.collab_backend.assignment.Assignment;
-import com.backend.collab_backend.student.Student;
-import com.backend.collab_backend.student.progress.ProgressServiceImpl;
+import com.backend.collab_backend.student.group.StudentGroupDTO;
+import com.backend.collab_backend.student.group.StudentGroupService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,12 +13,14 @@ import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class ScheduleServiceImpl implements ScheduleService {
   private static final Logger logger = LoggerFactory.getLogger(ScheduleServiceImpl.class);
   private final ScheduleRepository scheduleRepository;
+  private final StudentGroupService studentGroupService;
 
   // Method to calculate the remaining unallocated time for a student's homework
 //  public int calculateUnallocatedTimeForHomework(Student student, LocalDate startDate, LocalDate endDate) {
@@ -96,6 +97,31 @@ public class ScheduleServiceImpl implements ScheduleService {
   @Override
   public Schedule getScheduleById(Long scheduleId) {
     return scheduleRepository.findById(scheduleId).orElseThrow(() -> new ResourceNotFoundException("Schedule not found with id " + scheduleId));
+  }
+
+  public Schedule getScheduleByGroupIdAndDate(String groupId, LocalDate date) {
+    Optional<Schedule> scheduleOptional = scheduleRepository.findScheduleByGroupIdAndDate(groupId, date);
+    if (scheduleOptional.isPresent()) {
+      return scheduleOptional.get();
+    } else {
+      return null;
+    }
+  }
+  @Override
+  public List<Schedule> getScheduleByGroupId(String groupId) {
+    List<Schedule> schedule = scheduleRepository.findAllByGroupId(groupId);
+    if (!schedule.isEmpty()) {
+      return schedule;
+    } else {
+      Schedule schedule1 = new Schedule();
+      schedule1.setGroupId(groupId);
+      StudentGroupDTO studentGroupDTO = studentGroupService.findGroup(groupId);
+      schedule1.setFreeTimeLeft(""+ studentGroupDTO.freeTime);
+      schedule1.setDate(LocalDate.now());
+      schedule1.setId((studentGroupService.getAllGroups().stream().count()));
+      schedule.add(schedule1);
+      return schedule;
+    }
   }
 
   @Override

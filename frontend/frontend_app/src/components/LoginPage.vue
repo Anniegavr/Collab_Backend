@@ -8,17 +8,17 @@
           <input spellcheck="false" type="password" v-model="password" placeholder="Password" name="password" id="password" class="password_input" />
           <div style="display: flex; margin-top: 3vh;" id="roles">
             <div>
-              <input type="radio"  value="STUDENT" name="userRole" id="student_role" />
+              <input type="radio" v-model="role" value="STUDENT" name="userRole" id="student_role" />
               <label for="student_role">STUDENT</label>
             </div>
 
             <div>
-              <input type="radio"  value="TEACHER" name="userRole" id="teacher_role" />
+              <input type="radio" v-model="role" value="TEACHER" name="userRole" id="teacher_role" />
               <label for="teacher_role">TEACHER</label>
             </div>
 
             <div>
-              <input type="radio"  value="ADMIN" name="userRole" id="admin_role" />
+              <input type="radio" v-model="role" value="ADMIN" name="userRole" id="admin_role" />
               <label for="admin_role">ADMIN</label>
             </div>
           </div>
@@ -31,28 +31,15 @@
     </div>
   </div>
 </template>
-In this updated code, the radio inputs have the name="userRole" attribute, which groups them together. Now, only one radio button can be selected within the "userRole" group.
 
-
-
-
-
-
-
-
-<script >
+<script>
 import Router from "../router.ts";
 import axios from "axios";
-import {email} from "@vuelidate/validators";
+import { useToast } from 'vue-toastification';
 
 export default {
-  name: "SignUpPage",
-  // login: '',
-  // password: '',
-  // role: '',
-  // userId: '',
-  // message: '',
-  data () {
+  name: "LoginPage",
+  data() {
     return {
       role: '',
       message: '',
@@ -61,24 +48,6 @@ export default {
     }
   },
   methods: {
-    getCheckedRole() {
-      let chosenRole = '';
-      if (document.getElementById('student_role').checked) {
-        console.log("STUD")
-        chosenRole = 'STUDENT'
-      } else {
-        if (document.getElementById('teacher_role').checked) {
-          console.log("TICHA")
-          chosenRole = 'TEACHER'
-        } else {
-          if (document.getElementById('admin_role').checked) {
-            console.log("ADMIN")
-            chosenRole = 'ADMIN'
-          }
-        }
-      }
-      return chosenRole;
-    },
     createAccount() {
       this.message = "";
       this.login = "";
@@ -88,33 +57,33 @@ export default {
     enterAsGuest() {
       Router.push('/')
     },
-    submitForm(e){
-      e.preventDefault()
+    submitForm(e) {
+      e.preventDefault();
+
+      const toast = useToast();
+
       const body = {
         login: this.login,
         password: this.password,
-        role: this.getCheckedRole(),
+        role: this.role,
       }
-      axios.post('http://localhost:8081/auth/signin', body, {
-      })
+
+      axios.post('http://localhost:8081/auth/signin', body)
           .then(response => {
             if (response.status === 200) {
-              this.showError = false;
-              this.message = 'Login accepted';
-              this.login = "";
-              this.password = "";
-              this.role = null;
-              localStorage.removeItem("userId")
-              localStorage.setItem("userId", response.data)
-              Router.push('/home');
-            } else {
-              if(localStorage.getItem("userId") <= 0){
-                localStorage.setItem("userId", 5);
-              }
+              toast.success('Login accepted');
+              this.message = '';
+              this.login = '';
+              this.password = '';
+              this.role = '';
+              localStorage.removeItem("userId");
+              localStorage.setItem("userId", response.data);
+              localStorage.removeItem("role");
+              localStorage.setItem("role", this.role)
+              Router.push('/');
             }
           })
           .catch(error => {
-            Router.push('/home');
             console.error('Error:', error);
           });
     }

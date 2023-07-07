@@ -39,6 +39,7 @@ import axios from "axios";
 import SearchIcon from "./SearchIcon.vue";
 import SearchField from "./SearchField.vue";
 import {Student} from "../models/Student.ts";
+import { useToast } from 'vue-toastification';
 export default {
   name: "AllStudents",
   components: {SearchField, SearchIcon},
@@ -116,6 +117,8 @@ export default {
               .then(response => {
                 this.students = this.fetchStudents();
                 console.log(response.status + '\n' + response.data);
+                const toast = useToast();
+                toast.success('Student updated successfully');
               })
               .catch(error => {
                 console.log(error);
@@ -134,6 +137,8 @@ export default {
               .then(response => {
                 this.students = this.fetchStudents()
                 console.log(response.status+"\n "+response.data)
+                const toast = useToast();
+                toast.success('Student deleted successfully');
               })
               .catch(error => {
                 this.students.splice(index, 1);
@@ -174,6 +179,8 @@ export default {
             .then(response => {
               this.students.push(response.data);
               console.log('Added student: '.concat(response.data));
+              const toast = useToast();
+              toast.success('Student added successfully');
             })
             .catch(error => {
               this.students.push(newStudent);

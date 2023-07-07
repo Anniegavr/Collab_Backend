@@ -13,6 +13,8 @@ import com.backend.collab_backend.teacher.TeacherService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -46,15 +48,6 @@ public class AdminController {
     return ResponseEntity.ok(scheduleService.getAllSchedules());
   }
 
-  @GetMapping("/groups")
-  public ResponseEntity<List<StudentGroupDTO>> getAllGroups() {
-    return ResponseEntity.ok(studentGroupService.getAllGroups());
-  }
-
-  @DeleteMapping("/groups/{id}/delete")
-  public void deleteGroup(@PathVariable("id") String groupId) {
-    studentGroupService.deleteGroup(groupId);
-  }
 
   @PostMapping("/add_admin")
   public ResponseEntity<AdministratorDTO> createAdministrator(@RequestBody AdministratorDTO administratorDTO) {

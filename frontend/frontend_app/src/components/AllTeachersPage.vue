@@ -35,6 +35,7 @@ import SearchField from "./SearchField.vue";
 import SearchIcon from "./SearchIcon.vue";
 import axios from "axios";
 import { Teacher } from "../models/Teacher.ts";
+import {useToast} from "vue-toastification";
 
 export default {
   name: "TeachersPage",
@@ -96,6 +97,8 @@ export default {
               .then(response => {
                 this.fetchTeachers();
                 console.log('Modified types: '.concat(response.data));
+                const toast = useToast();
+                toast.success('Teacher updated successfully');
               })
               .catch(error => {
                 this.fetchedTeachers[index] = teacherToEdit;
@@ -119,6 +122,8 @@ export default {
               .then(response => {
                 this.fetchTeachers()
                 console.log("Modified types: ".concat(response.data))
+                const toast = useToast();
+                toast.success('Teacher deleted successfully');
               })
               .catch(error => {
                 const index = this.fetchedTeachers.indexOf(teacher)
@@ -155,6 +160,8 @@ export default {
             .then(response => {
               this.fetchTeachers();
               console.log('Added teacher: '.concat(response.data));
+              const toast = useToast();
+              toast.success('Teacher added successfully');
             })
             .catch(error => {
               this.fetchedTeachers.push(newTeacher);

@@ -7,6 +7,7 @@ public interface AssignmentService {
   List<AssignmentDTO> findAllByGroup(String group);
 
   AssignmentDTO findAssignmentById(Long id);
+  Assignment findByTitleAndDescription(String title, String description);
   AssignmentDTO createAssignment(AssignmentDTO assignment);
   AssignmentDTO updateAssignment(Long assignId, AssignmentDTO assignment);
 

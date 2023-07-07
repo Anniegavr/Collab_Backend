@@ -14,8 +14,10 @@
       <v-button class="home-link" @click="toggleMenu">
         <img class="menu_icon" src="./icons/homeIcon.png" alt="Home">
       </v-button>
-
-      <p id="menu-title">Collab Buddy</p>
+      <v-button class="home-link" @click="goHome">
+      <img src="./assets/nav/cb_logo.png" style="height: 7vh; cursor: pointer; margin-left: 1vw">
+      </v-button>
+<!--      <p id="menu-title">Collab Buddy</p>-->
 
       <div class="right_icons">
         <router-link to="/">
@@ -36,9 +38,11 @@ import { defineProps, ref } from 'vue'
 import ProgressIcon from "./icons/ProgressIcon.vue";
 import SearchField from "./SearchField.vue";
 import IconHome from "./icons/IconHome.vue";
+import Router from "../router.ts";
 
 export default {
   name: "NavigationBar",
+  components: {IconHome},
   props: {
     pageTitle: {
       type: String,
@@ -54,6 +58,9 @@ export default {
     }
   },
   methods: {
+    goHome() {
+      Router.push("/home")
+    },
     closemenu() {
       this.menuActive = false;
     },
@@ -111,6 +118,7 @@ export default {
   font-size: 4vh;
   line-height: 50%;
   color: #FFFFFF;
+  margin-left: 8vw;
 }
 
 
@@ -118,7 +126,8 @@ export default {
   display: flex; /* add display flex */
   align-items: center; /* add align-items center */
   gap: 1vw;
-
+  position: relative;
+  margin-left: 50vw;
 }
 
 .home-link {

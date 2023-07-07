@@ -21,9 +21,26 @@ public class StudentGroupServiceImpl implements StudentGroupService {
                                             group.getStartYear(),
                                             group.getTripTime(),
                                             group.getFreeTime(),
+                                            group.getSleepTime(),
+                                            group.getClassTime(),
                                             group.getYear()));
     }
     return allGroupsDTOs;
+  }
+
+  public StudentGroupDTO addGroup(StudentGroupDTO studentGroupDTO) {
+    StudentGroup studentGroup = convertDTOToReal(studentGroupDTO);
+    studentGroupRepository.save(studentGroup);
+    return studentGroupDTO;
+  }
+
+  public StudentGroupDTO findGroup(String groupId) {
+    Optional<StudentGroup> studentGroupOptional = studentGroupRepository.findStudentGroupByGroupId(groupId);
+    if (studentGroupOptional.isPresent()) {
+      return convertRealToDTO(studentGroupOptional.get());
+    } else {
+      return new StudentGroupDTO(groupId, groupId+"@isa.utm.md", "ISA", 2019, 2, 4, 7, 3, 4);
+    }
   }
 
   public StudentGroupDTO editGroup(String name, StudentGroupDTO studentGroupDTO) {
@@ -44,7 +61,8 @@ public class StudentGroupServiceImpl implements StudentGroupService {
   }
   @Override
   public void deleteGroup(String id) {
-    studentGroupRepository.deleteById(id);
+    Optional<StudentGroup> studentGroup = studentGroupRepository.findStudentGroupByGroupId(id);
+    studentGroup.ifPresent(studentGroupRepository::delete);
   }
 
   public StudentGroupDTO createGroup(StudentGroupDTO group) {
@@ -53,15 +71,18 @@ public class StudentGroupServiceImpl implements StudentGroupService {
     return group;
   }
 
-  public StudentGroupDTO updateGroup(StudentGroupDTO group) {
-    studentGroupRepository.delete(studentGroupRepository.findStudentGroupByGroupId(group.name));
-    StudentGroup newGroup = convertDTOToReal(group);
-    studentGroupRepository.save(newGroup);
-    return group;
-  }
-
-  public void deleteGroup(StudentGroupDTO group) {
-    studentGroupRepository.delete(studentGroupRepository.findStudentGroupByGroupId(group.name));
+  public StudentGroupDTO convertRealToDTO(StudentGroup studentGroup) {
+    return new StudentGroupDTO(
+            studentGroup.getGroupId(),
+            studentGroup.getEmail(),
+            studentGroup.getSpecialty(),
+            studentGroup.getStartYear(),
+            studentGroup.getTripTime(),
+            studentGroup.getFreeTime(),
+            studentGroup.getSleepTime(),
+            studentGroup.getClassTime(),
+            studentGroup.getYear()
+    );
   }
 
   public StudentGroup convertDTOToReal(StudentGroupDTO group) {

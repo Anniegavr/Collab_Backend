@@ -6,7 +6,6 @@
       </div>
       <div class="menu" :class="{ active: menuActive }">
         <ul>
-          <li><router-link to="/students">Students</router-link></li>
           <li><router-link @click="fetchData" to="/admin/all_config">View All Configurations</router-link></li>
           <li><router-link @click="fetchData" to="/admin">Admin Panel</router-link></li>
           <li><router-link @click="fetchData" to="/teacher_panel_proxy">Teacher Panel</router-link></li>

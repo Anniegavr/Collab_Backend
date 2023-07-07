@@ -23,5 +23,7 @@ public class StudentGroup {
   private String specialty;
   private int startYear;
   private int freeTime;
+  private int sleepTime;
+  private int classTime;
   private int tripTime;
 }

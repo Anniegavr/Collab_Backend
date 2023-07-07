@@ -2,8 +2,8 @@
   <div id="app">
     <div class="page_elements">
       <div class="profile_grid">
-        <div class="left_part">
-          <img src="./assets/profile.jpg" class="profile_img" style="position: static;max-width: 60vh"/>
+        <div class="left_part" style="margin-top: 12vh; z-index: -1">
+          <img src="./assets/profile_img.png" class="profile_img" style="position: static;max-width: 60vh"/>
         </div>
 
         <div class="right_part">
@@ -24,6 +24,7 @@
       </div>
     </div>
   </div>
+  <button class="addRecord" @click="addRecord">+</button>
 </template>
 
 <script>
@@ -31,38 +32,67 @@ import AssignmentsProgress from "./AssignmentsProgress.vue";
 import HorizontalChart from "./HorizontalChart.vue";
 import axios from "axios";
 import DonutChart from "./DonutChart.vue";
+import {useToast} from "vue-toastification";
 
 export default {
   name: "ProfilePage",
   components: {DonutChart, HorizontalChart, AssignmentsProgress },
   data() {
     return {
-      bars: [
-        { variant: 'success', value: 75 },
-        { variant: 'info', value: 75 },
-        { variant: 'warning', value: 75 },
-        { variant: 'danger', value: 75 },
-        { variant: 'primary', value: 75 },
-        { variant: 'secondary', value: 75 },
-        { variant: 'dark', value: 75 }
-      ],
       timer: null,
-      achievementData: {}
+      achievementData: {},
+      studentId: null
     };
   },
   mounted() {
     this.timer = setInterval(() => {
       this.bars.forEach(bar => (bar.value = 25 + Math.random() * 75));
     }, 2000);
+    this.fetchAchievements();
+  },
+  methods: {
+    fetchAchievements() {
+      let studentId = localStorage.getItem("userId")
+      this.studentId = studentId;
+      axios.get("http://localhost:8081/students/"+studentId+"/accomplishments")
+          .then(response => {
+            this.achievementData = response.data;
+          })
+          .catch(error => {
+            console.error("Error:", error);
+          });
+    },
+    addRecord() {
+      const skillType = prompt('Enter the skill type:');
+      const description = prompt('Describe the achievement:');
+      if (
+          skillType.trim() !== '' &&
+          description.trim() !== ''
+      ) {
+        const newSkill = {
+          studentId: localStorage.getItem("userId"),
+          skillType: skillType,
+          studentAccomplishment: description,
+        };
+        axios
+            .post('http://localhost:8081/students/'+localStorage.getItem("userId")+'/add_skill', newSkill)
+            .then(response => {
+              const toast = useToast();
+              toast.success('Achievement added successfully');
+              console.log('Added skill: '.concat(response.data));
 
-    let studentId = localStorage.getItem("userId")
-    axios.get("http://localhost:8081/students/"+studentId+"/accomplishments")
-        .then(response => {
-          this.achievementData = response.data;
-        })
-        .catch(error => {
-          console.error("Error:", error);
-        });
+              this.achievementData=this.fetchAchievements();
+            })
+            .catch(error => {
+              this.studentGroups.push(newStudentGroup);
+              alert('Success');
+              console.log(error);
+            });
+      } else {
+        const toast = useToast();
+        toast.info("You must fill in all the fields.");
+      }
+    }
   },
   beforeDestroy() {
     clearInterval(this.timer);
@@ -72,6 +102,14 @@ export default {
 </script>
 
 <style scoped>
+.addRecord {
+  color: rgba(97, 68, 173, 0.98);
+  font-size: x-large;
+  border-color: rgba(97, 68, 173, 0.98);
+  border-radius: 15px;
+  margin-top: 10vh;
+  filter: drop-shadow(-5px 2px 5px rgba(0, 0, 0, 0.25));
+}
 .page_elements {
   display: flex;
   flex-direction: column;
@@ -92,15 +130,16 @@ export default {
 .profile_img {
   border-radius: 5vh;
   border-color: #dddddd;
-  box-shadow: -9px 20px 28px 17px rgba(0, 0, 0, 0.25);
+  box-shadow: -9px 20px 20px 10px rgba(0, 0, 0, 0.25);
   display: flow;
   position: relative;
 }
 
+
 .achievements {
   top: 6vh;
   margin: auto;
-  box-shadow:  2px 4px 4px rgba(19, 39, 103, 0.25);
+  box-shadow: -9px 12px 18px 10px rgba(0, 0, 0, 0.25);
   border-radius: 15px;
   width: 50%;
   position: relative;

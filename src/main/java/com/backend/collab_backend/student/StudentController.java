@@ -1,9 +1,18 @@
 package com.backend.collab_backend.student;
 
+import com.backend.collab_backend.assignment.Assignment;
 import com.backend.collab_backend.assignment.AssignmentDTO;
 import com.backend.collab_backend.assignment.AssignmentService;
+import com.backend.collab_backend.assignment.to.schedule.AssignScheduleService;
+import com.backend.collab_backend.assignment.to.schedule.assignment.set.AssignmentSet;
+import com.backend.collab_backend.assignment.to.schedule.assignment.set.AssignmentSetService;
 import com.backend.collab_backend.course.CourseDTO;
+import com.backend.collab_backend.schedule.Schedule;
+import com.backend.collab_backend.schedule.ScheduleRepository;
+import com.backend.collab_backend.schedule.ScheduleService;
 import com.backend.collab_backend.schedule.ScheduleTask;
+import com.backend.collab_backend.student.group.StudentGroupDTO;
+import com.backend.collab_backend.student.group.StudentGroupService;
 import com.backend.collab_backend.student.progress.ProgressDTO;
 import com.backend.collab_backend.student.progress.ProgressService;
 import com.backend.collab_backend.student.skill.SkillService;
@@ -12,6 +21,7 @@ import com.backend.collab_backend.student.skill.accomplishment.AccomplishmentSer
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.relational.core.sql.In;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -21,8 +31,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/students")
@@ -31,9 +44,12 @@ import java.util.List;
 public class StudentController {
   private static final Logger logger = LoggerFactory.getLogger(StudentController.class);
   private final StudentService studentService;
+  private final StudentGroupService studentGroupService;
   private final AccomplishmentService accomplishmentService;
   private final AssignmentService assignmentService;
+  private final AssignmentSetService assignmentSetService;
   private final ProgressService progressService;
+  private final ScheduleService scheduleService;
 
   @GetMapping
   public List<StudentDTO> getAllStudents() {
@@ -66,8 +82,8 @@ public class StudentController {
     System.out.println("Received request to view courses for student_id = "+id);
     return ResponseEntity.ok(allCourses);
   }
-  @GetMapping("/{id}/schedule")
-  public ResponseEntity<List<ScheduleTask>> getAllStudentTasks(@PathVariable Long id) {
+
+  public List<ScheduleTask> getAltTasks() {
     List<ScheduleTask> allTasks = new ArrayList<>();
     allTasks.add(new ScheduleTask("LFPC", 4));
     allTasks.add(new ScheduleTask("PTR", 2));
@@ -76,9 +92,64 @@ public class StudentController {
     allTasks.add(new ScheduleTask("Class Time", 3));
     allTasks.add(new ScheduleTask("Trip", 1));
     allTasks.add(new ScheduleTask("Sleep", 7));
+    return allTasks;
+  }
+  @GetMapping("/{id}/schedule")
+  public ResponseEntity<List<ScheduleTask>> getAllStudentTasks(@PathVariable Long id) {
     logger.info("Received request to view schedule tasks for student_id {} ",id);
-    System.out.println("Received request to view schedule tasks for student_id = "+id);
-    return ResponseEntity.ok(allTasks);
+    StudentDTO studentDTO = studentService.getStudentById(id);
+    if (!studentDTO.group.equals("")) {
+      Schedule schedule = scheduleService.getScheduleByGroupIdAndDate(studentDTO.group, LocalDate.now());
+      if (schedule == null) {
+        return ResponseEntity.ok(getAltTasks());
+      } else {
+        StudentGroupDTO groupDTO = studentGroupService.findGroup(studentDTO.group);
+        int sleepTime = groupDTO.sleepTime;
+        int classTime = groupDTO.classTime;
+        int tripTime = groupDTO.tripTime;
+        int freeTime = groupDTO.freeTime;
+        int homeworkTime = 0;
+        Long assignmentsSet = schedule.getAssignmentSetId();
+        if (assignmentsSet != null) {
+          List<AssignmentSet> assignmentSets = assignmentSetService.findAllSetsBySetId(assignmentsSet);
+          if (assignmentSets.isEmpty()) {
+            return ResponseEntity.ok(getAltTasks());
+          }
+          List<AssignmentDTO> assignmentDTOS = new ArrayList<>();
+          for (AssignmentSet set : assignmentSets) {
+            AssignmentDTO assignmentDTO = assignmentService.findAssignmentById(set.getAssignmentId());
+            if (assignmentDTO.title.equals("") && assignmentDTO.description.equals("") && assignmentDTO.time.equals("")) {
+            } else {
+              assignmentDTOS.add(assignmentDTO);
+            }
+          }
+          if (assignmentDTOS.isEmpty()) {
+            return ResponseEntity.ok(getAltTasks());
+          }
+          List <ScheduleTask> scheduleTasks = new ArrayList<>();
+          for (AssignmentDTO assignmentDTO : assignmentDTOS) {
+            Assignment assignment = assignmentService.findByTitleAndDescription(assignmentDTO.title, assignmentDTO.description);
+            int spendForTask = assignmentSetService.findByAssignmentId(assignment.getAssignmentId()).getTimeToSpend();
+            scheduleTasks.add(new ScheduleTask(assignmentDTO.title, spendForTask));
+            homeworkTime += spendForTask;
+          }
+          int calculatedTotalHrs = sleepTime+classTime+tripTime+homeworkTime;
+           if (calculatedTotalHrs < 24) {
+            freeTime += 24-calculatedTotalHrs;
+          } else if (calculatedTotalHrs > 24 ) {
+            freeTime -= calculatedTotalHrs - 24;
+          }
+          scheduleTasks.add(new ScheduleTask("Sleep", sleepTime));
+          scheduleTasks.add(new ScheduleTask("Class Time", classTime));
+          scheduleTasks.add(new ScheduleTask("Trip Time", tripTime));
+          scheduleTasks.add(new ScheduleTask("Free Time", freeTime));
+          return ResponseEntity.ok(scheduleTasks);
+        }
+
+        return ResponseEntity.ok(getAltTasks());
+      }
+    }
+    return ResponseEntity.ok(getAltTasks());
   }
   @GetMapping("/{id}/progress")
   public ResponseEntity<List<ProgressDTO>> getStudentProgressById(@PathVariable Long id) {
@@ -99,9 +170,9 @@ public class StudentController {
   }
 
   @PostMapping("/{id}/add_skill")
-  public ResponseEntity<String> addAccomplishment(@PathVariable("id") Long studentId,@RequestBody String skillType, @RequestBody String accomplishment) {
+  public ResponseEntity<String> addAccomplishment(@PathVariable("id") Long studentId,@RequestBody Accomplishment accomplishment) {
     logger.info("Adding accomplishment for student_id[{}]", studentId);
-    return ResponseEntity.ok(accomplishmentService.addAccomplishment(studentId, accomplishment, skillType ));
+    return ResponseEntity.ok(accomplishmentService.addAccomplishment(studentId, accomplishment.getStudentAccomplishment(), accomplishment.getSkillType()));
   }
 
   @GetMapping("/{id}/accomplishments")

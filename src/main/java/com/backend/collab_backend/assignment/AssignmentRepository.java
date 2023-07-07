@@ -12,5 +12,7 @@ public interface AssignmentRepository extends JpaRepository<Assignment, Long> {
   Optional<Assignment> findAssignmentByTeacherName(String name);
   Optional<Assignment> findAssignmentByTeacherNameContainingIgnoreCase(String teacherName);
   Optional<Assignment> findAssignmentByTitleContainingIgnoreCase(String containing);
+
+  Optional<Assignment> findAssignmentByTitleAndDescription(String title, String descr);
   List<Assignment> findAllByGroupId(String group);
 }
